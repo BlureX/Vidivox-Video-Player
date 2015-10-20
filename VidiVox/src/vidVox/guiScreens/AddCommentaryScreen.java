@@ -33,6 +33,10 @@ public class AddCommentaryScreen extends JFrame{
 	private JPanel pane;
 	private JTextField textfield;
 	public static TextToMp3Screen createCommentaryScreen;
+	private JSpinner hourSpinner;
+	private JSpinner minuteSpinner;
+	private JSpinner secondSpinner;
+	
 	public AddCommentaryScreen (MainPlayerScreen screen){
 		
 		//making the main initial layout for the AddCommentaryScreen
@@ -186,7 +190,7 @@ public class AddCommentaryScreen extends JFrame{
 		pane.add(label1, c);
 		
 		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,113,1);
-		JSpinner hourSpinner = new JSpinner(hourSpinnerModel);
+		hourSpinner = new JSpinner(hourSpinnerModel);
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
@@ -198,7 +202,7 @@ public class AddCommentaryScreen extends JFrame{
 		pane.add(hourSpinner, c);
 
 		SpinnerModel minuteSpinnerModel = new SpinnerNumberModel(0,0,60,1);
-		JSpinner minuteSpinner = new JSpinner(minuteSpinnerModel);
+		minuteSpinner = new JSpinner(minuteSpinnerModel);
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
@@ -210,7 +214,7 @@ public class AddCommentaryScreen extends JFrame{
 		
 
 		SpinnerModel secondSpinnerModel = new SpinnerNumberModel(0,0,60,1);
-		JSpinner secondSpinner = new JSpinner(secondSpinnerModel);
+		secondSpinner = new JSpinner(secondSpinnerModel);
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
@@ -237,7 +241,16 @@ public class AddCommentaryScreen extends JFrame{
 		 c.weighty = 1;
 		 pane.add(two, c);
 		 
-		 
+		 JButton createVideo = new JButton("Create Video");
+			c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = 3;
+			c.gridwidth = 0;
+			c.weightx = 1;
+			c.weighty = 1;
+			c.anchor = GridBagConstraints.EAST;
+			//c.insets = new Insets(3,3,3,3);
+			pane.add(createVideo, c);
 
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
@@ -255,7 +268,21 @@ public class AddCommentaryScreen extends JFrame{
 				if (!(ourFileSelector.getSelectedFile() == null)){
 					ourFile=ourFileSelector.getSelectedFile();
 					mediaPath=ourFile.getAbsolutePath();
-					textfield.setText(mediaPath);	
+					 String hour=hourSpinner.getValue().toString();
+					 String minute=minuteSpinner.getValue().toString();
+					 String second=secondSpinner.getValue().toString();
+					 
+					if (hourSpinner.getValue().toString().length()<=1){
+						hour="0"+hourSpinner.getValue().toString();
+					}
+					if (minuteSpinner.getValue().toString().length()<=1){
+						minute="0"+minuteSpinner.getValue().toString();
+					}
+					if (secondSpinner.getValue().toString().length()<=1){
+						second="0"+secondSpinner.getValue().toString();
+					}
+					Object[] data = { mediaPath , "gg", hour+":"+minute+":"+second};
+					audioOverlayTable.addRow(data);	
 				}
 			}
 		});
@@ -276,7 +303,20 @@ public class AddCommentaryScreen extends JFrame{
 		 createCommentary.addActionListener(new ActionListener() {
 			 @Override
 			 public void actionPerformed(ActionEvent e) {
-				 Object[] data = { textfield.getText() , "gg", "time" };
+				 String hour=hourSpinner.getValue().toString();
+				 String minute=minuteSpinner.getValue().toString();
+				 String second=secondSpinner.getValue().toString();
+				 
+				if (hourSpinner.getValue().toString().length()<=1){
+					hour="0"+hourSpinner.getValue().toString();
+				}
+				if (minuteSpinner.getValue().toString().length()<=1){
+					minute="0"+minuteSpinner.getValue().toString();
+				}
+				if (secondSpinner.getValue().toString().length()<=1){
+					second="0"+secondSpinner.getValue().toString();
+				}
+				Object[] data = { textfield.getText() , "gg", hour+":"+minute+":"+second};
 				audioOverlayTable.addRow(data);
 			 }
 		 });
@@ -295,6 +335,29 @@ public class AddCommentaryScreen extends JFrame{
 			        
 			 }
 		 });
+		 createVideo.addActionListener(new ActionListener() {
+			 @Override
+			 public void actionPerformed(ActionEvent e) {
+				 int totalRows = table.getRowCount();
+				 String cmd = "ffmpeg -y -i " + MainPlayerScreen.mediapath + " ";
+				 for (int i = 0 ; i<totalRows; i++){
+					String fileName = table.getValueAt(i,0).toString();
+					String time = table.getValueAt(i,2).toString();
+					String[] splitArray = time.split(":");
+					int totalTime = Integer.parseInt(splitArray[0])*3600 + Integer.parseInt(splitArray[1])*60 + Integer.parseInt(splitArray[2]);
+					cmd = cmd+ "-itsoffset " + totalTime + " -i " + fileName + " ";
+				 }
+				 for (int i = 0 ; i<= totalRows; i++){
+					 cmd = cmd + "-map " + i +":0" + " ";
+
+				 }
+				 cmd = cmd + "-c:v copy -async 1 -filter_complex amix=inputs=" + (totalRows+1) + " ";
+				 //System.out.println(cmd);
+			     OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolFile",true);
+			     mergeVideo.execute();
+			 }
+		 });
+		 
 
 
 	}

@@ -58,7 +58,9 @@ public class MainPlayerScreen extends JFrame {
 	GridBagConstraints c;
 
 	//Buttons, sliders and labels which are used in my GUI for users to click.
-	JButton fastforward, rewind, mute, play, addCommentaryButton;
+	JButton fastforward, rewind, mute;
+	public JButton play;
+	JButton addCommentaryButton;
 	JSlider volume;
 	public JSlider positionSlider;
 	JLabel volumeLabel,timeLabel,endLabel;
