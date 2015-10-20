@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import vidVox.workers.PreviewTextSpeech;
+import vidVox.workers.PreviewMP3;
 import vidVox.workers.TextToFile;
 
 
@@ -107,7 +107,7 @@ public class TextToMp3Screen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Error please enter some characters, not only spaces");
 
 				}else{
-					PreviewTextSpeech k = new PreviewTextSpeech(textbox.getText());
+					PreviewMP3 k = new PreviewMP3(textbox.getText());
 					k.execute();
 				}
 			}

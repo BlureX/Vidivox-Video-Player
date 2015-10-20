@@ -21,7 +21,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
-import vidVox.MoveVideoFile;
+import vidVox.MoveFile;
 import vidVox.OpenVideo;
 import vidVox.SaveVideoAs;
 import vidVox.workers.Skip;
@@ -111,7 +111,7 @@ public class MainPlayerScreen extends JFrame {
 						 if (MainPlayerScreen.mediapath == null){
 							 JOptionPane.showMessageDialog(null, "error please open a video before trying to save");
 						 } else { 
-							 MoveVideoFile k = new MoveVideoFile(mediapath, TextToMp3Screen.originalVideo);
+							 MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo);
 							 k.execute();
 						 }
 					 } else if (choice == 1) {
@@ -643,7 +643,7 @@ public class MainPlayerScreen extends JFrame {
 				 if (MainPlayerScreen.mediapath == null){
 					 JOptionPane.showMessageDialog(null, "Error please open a video before trying to save.");
 				 }else{
-					 MoveVideoFile k = new MoveVideoFile(mediapath, TextToMp3Screen.originalVideo);
+					 MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo);
 					 k.execute();
 				 }
 			 }

@@ -7,6 +7,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -24,7 +26,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import vidVox.MoveFile;
 import vidVox.workers.OverlayMp3OntoVideo;
+import vidVox.workers.PreviewMP3;
 import vidVox.workers.TextToFile;
 
 public class AddCommentaryScreen extends JFrame{
@@ -37,6 +41,8 @@ public class AddCommentaryScreen extends JFrame{
 	private JSpinner minuteSpinner;
 	private JSpinner secondSpinner;
 	private int counter=0;
+	List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
+
 
 	public AddCommentaryScreen (MainPlayerScreen screen){
 
@@ -47,11 +53,11 @@ public class AddCommentaryScreen extends JFrame{
 		createCommentaryScreen = new TextToMp3Screen(screen);
 		createCommentaryScreen.setBounds(385, 475, 650, 100);
 		createCommentaryScreen.setMinimumSize(new Dimension(650, 100));
-		final DefaultTableModel audioOverlayTable;
+		final DefaultTableModel commentaryTable;
 		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add",""};
 		//Code which I have referenced to hide the table
 		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
-		audioOverlayTable = new DefaultTableModel(audioOverlayOptions,0){
+		commentaryTable = new DefaultTableModel(audioOverlayOptions,0){
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				Class classType = String.class;
@@ -75,8 +81,8 @@ public class AddCommentaryScreen extends JFrame{
 				return false;
 			}
 		};
-		final JTable table = new JTable(audioOverlayTable);
-		table.setModel(audioOverlayTable);
+		final JTable table = new JTable(commentaryTable);
+		table.setModel(commentaryTable);
 		table.setPreferredSize(new Dimension(550,400));
 		//table.removeColumn(table.getColumnModel().getColumn(3));
 		JScrollPane scrollPane = new JScrollPane(); 
@@ -86,7 +92,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		for (int i=0; i<10;i++){
 			Object[] data = { i , i, i };
-			audioOverlayTable.addRow(data);
+			commentaryTable.addRow(data);
 		}
 		//creating the content pane which will store all of the addcommentaryScreen components
 		GridBagLayout gbl_Pane = new GridBagLayout();
@@ -258,18 +264,29 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.EAST;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(createVideo, c);
-		
-		JButton previewCommentary = new JButton("Create Video");
+
+		JButton preview = new JButton("Preview");
 		c = new GridBagConstraints();
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 3;
-		c.gridwidth = 0;
+		c.gridwidth = 1;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.anchor = GridBagConstraints.EAST;
-		//c.insets = new Insets(3,3,3,3);
-		pane.add(previewCommentary, c);
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(3,3,3,3);
+		pane.add(preview, c);
 		
+		JButton saveButton = new JButton("Save");
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		c.insets = new Insets(3,3,3,3);
+		pane.add(saveButton, c);
+
 		/*
 		JButton editCommentary = new JButton("Edit Commentary");
 		c = new GridBagConstraints();
@@ -281,7 +298,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.WEST;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(editCommentary, c);
-		
+
 		JButton editTime = new JButton("Edit Time");
 		c = new GridBagConstraints();
 		c.gridx = 1;
@@ -292,8 +309,8 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.WEST;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(editTime, c);
-		*/
-		
+		 */
+
 
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
@@ -326,12 +343,12 @@ public class AddCommentaryScreen extends JFrame{
 							second="0"+secondSpinner.getValue().toString();
 						}
 						Object[] data = { ourFile.getName() , "gg", hour+":"+minute+":"+second, mediaPath};
-						audioOverlayTable.addRow(data);	
+						commentaryTable.addRow(data);	
 					}else {
 						JOptionPane.showMessageDialog(null, "Error please select an appropriate file");
 					}
 				}else if (status == JFileChooser.CANCEL_OPTION){
-					
+
 				}
 			}
 		});
@@ -369,7 +386,7 @@ public class AddCommentaryScreen extends JFrame{
 				tmpFile.execute();
 				Object[] data = { textfield.getText() , "gg", hour+":"+minute+":"+second,"/tmp/festSpeech"+counter+".mp3" };
 				counter++;
-				audioOverlayTable.addRow(data);
+				commentaryTable.addRow(data);
 			}
 		});
 
@@ -381,13 +398,13 @@ public class AddCommentaryScreen extends JFrame{
 				int rowsSelected = table.getSelectedRows().length;
 				for(int i=0; i<rowsSelected ; i++ ) {
 
-					audioOverlayTable.removeRow(table.getSelectedRow());
+					commentaryTable.removeRow(table.getSelectedRow());
 				}
 
 
 			}
 		});
-		
+
 		createVideo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -408,6 +425,74 @@ public class AddCommentaryScreen extends JFrame{
 				//System.out.println(cmd);
 				OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true);
 				mergeVideo.execute();
+				setVisible(false);
+			}
+		});
+
+		preview.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row=table.getSelectedRow();
+				boolean speaking=false;
+				if (row >-1 ){
+					//Loop through the current playing voices.
+					for (PreviewMP3 currentCommentary : voiceList){
+						//If it is in the festival voice but stopped playing, remove it and set speaking to false.
+						if (commentaryTable.getValueAt(row, 3).equals(currentCommentary.getFile()) && currentCommentary.speaking==false){
+							voiceList.remove(currentCommentary);
+							System.out.println("GG");
+							speaking=false;
+							break;
+							//If it is still speaking, set speaking to true.
+						}else if (commentaryTable.getValueAt(row, 3).equals(currentCommentary.getFile()) && currentCommentary.speaking==true){
+							speaking=true;
+							System.out.println("SPEAKING NOW SOn");
+							break;
+						}
+					}
+					//If it is not speaking or it has not been selected before, add it to the array and execute the voice.
+					if (speaking == false){
+						PreviewMP3 previewAudio = new PreviewMP3(commentaryTable.getValueAt(row, 3).toString());
+						voiceList.add(previewAudio);
+						previewAudio.execute();
+					}
+
+				}
+
+
+			}
+		});
+
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String mediaPath="~/";
+				File ourFile;
+				FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
+				SaveDialogScreen.ourFileSelector.resetChoosableFileFilters();
+				//opening the save file explorer, user gets to choose where to save the file   
+				SaveDialogScreen.ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				SaveDialogScreen.ourFileSelector.setFileFilter(filter);
+				int status = SaveDialogScreen.ourFileSelector.showSaveDialog(null);
+				if (status == JFileChooser.APPROVE_OPTION){
+					if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
+						ourFile=SaveDialogScreen.ourFileSelector.getSelectedFile();
+						mediaPath=ourFile.getAbsolutePath();
+						if ((!(mediaPath.endsWith(".mp3")))) {
+							mediaPath = mediaPath+".mp3";
+						}
+						//creates the mp3 file at the location
+						int row = table.getSelectedRow();
+						String filename = commentaryTable.getValueAt(row, 3).toString();
+						MoveFile k = new MoveFile(filename,mediaPath);
+						k.execute();
+					}else{
+						JOptionPane.showMessageDialog(null, "Error please save to an appropriate location");
+					}
+				}else if (status == JFileChooser.CANCEL_OPTION){
+
+				}
+
 			}
 		});
 		/*
@@ -423,19 +508,19 @@ public class AddCommentaryScreen extends JFrame{
 				counter++;
 			}
 		});
-		
+
 		editTime.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int[] rowsSelected = table.getSelectedRows();
-				
+
 				for(int i=0; i<rowsSelected.length ; i++ ) {
 					audioOverlayTable.setValueAt(textfield.getText(), rowsSelected[i], 0);
 				}
-				
+
 			}
 		});
-		*/
+		 */
 	}
 
 

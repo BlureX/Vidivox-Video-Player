@@ -37,7 +37,7 @@ public class SaveVideoAs {
 					mediaPath1 = mediaPath1+".mp4";
 				}
 
-				MoveVideoFile k = new MoveVideoFile(MainPlayerScreen.mediapath, mediaPath1);
+				MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1);
 				k.execute();
 			}
 		}
