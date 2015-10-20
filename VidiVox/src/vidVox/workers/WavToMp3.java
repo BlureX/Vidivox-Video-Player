@@ -44,12 +44,12 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 
 	protected void done(){
 		//if this mp3 needs to be overlayed
-		if (overlay){
+		/*if (overlay){
 			OverlayMp3OntoVideo k = new OverlayMp3OntoVideo(this.location, this.filename, this.overlay);
 			k.execute();
 			// do the overlay 
 
-		}
+		}*/
 	}
 
 }

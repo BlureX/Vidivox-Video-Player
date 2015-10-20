@@ -26,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import vidVox.workers.OverlayMp3OntoVideo;
+import vidVox.workers.TextToFile;
 
 public class AddCommentaryScreen extends JFrame{
 
@@ -36,9 +37,10 @@ public class AddCommentaryScreen extends JFrame{
 	private JSpinner hourSpinner;
 	private JSpinner minuteSpinner;
 	private JSpinner secondSpinner;
-	
+	private int counter=0;
+
 	public AddCommentaryScreen (MainPlayerScreen screen){
-		
+
 		//making the main initial layout for the AddCommentaryScreen
 		//setBounds(450, 450, 850, 100);
 		GridBagConstraints c = new GridBagConstraints();
@@ -46,41 +48,47 @@ public class AddCommentaryScreen extends JFrame{
 		createCommentaryScreen = new TextToMp3Screen(screen);
 		createCommentaryScreen.setBounds(385, 475, 650, 100);
 		createCommentaryScreen.setMinimumSize(new Dimension(650, 100));
-        final DefaultTableModel audioOverlayTable;
-        String[] audioOverlayOptions = {"Commentary", "Duration","Time to add"};
-        audioOverlayTable = new DefaultTableModel(audioOverlayOptions,0){
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-        	 Class classType = String.class;
-        	      switch (columnIndex) {
-        	        case 0:
-        	          classType = String.class;
-        	          break;
-        	        case 2:
-        	          classType = String.class;
-        	          break;
-        	        case 3:
-          	          classType = String.class;
-          	          break;
-        	      }
-         return classType;
-        }
-        public boolean isCellEditable(int rowIndex, int mColIndex) {
-            return false;
-          }
-       };
-       final JTable table = new JTable(audioOverlayTable);
-       table.setModel(audioOverlayTable);
-       table.setPreferredSize(new Dimension(550,400));
-       JScrollPane scrollPane = new JScrollPane(); 
-      // scrollPane.setBounds(20, 75, 400, 400);
-       scrollPane.setViewportView(table);
-     //  scrollPane.setMinimumSize( scrollPane.getPreferredSize() );
-       
-       for (int i=0; i<10;i++){
-       Object[] data = { i , i, i };
-       audioOverlayTable.addRow(data);
-       }
+		final DefaultTableModel audioOverlayTable;
+		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add",""};
+		//Code which I have referenced to hide the table
+		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
+		audioOverlayTable = new DefaultTableModel(audioOverlayOptions,0){
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				Class classType = String.class;
+				switch (columnIndex) {
+				case 0:
+					classType = String.class;
+					break;
+				case 1:
+					classType = String.class;
+					break;
+				case 2:
+					classType = String.class;
+					break;
+				case 3:
+					classType = String.class;
+					break;
+				}
+				return classType;
+			}
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+			}
+		};
+		final JTable table = new JTable(audioOverlayTable);
+		table.setModel(audioOverlayTable);
+		table.setPreferredSize(new Dimension(550,400));
+		//table.removeColumn(table.getColumnModel().getColumn(3));
+		JScrollPane scrollPane = new JScrollPane(); 
+		// scrollPane.setBounds(20, 75, 400, 400);
+		scrollPane.setViewportView(table);
+		//  scrollPane.setMinimumSize( scrollPane.getPreferredSize() );
+
+		for (int i=0; i<10;i++){
+			Object[] data = { i , i, i };
+			audioOverlayTable.addRow(data);
+		}
 		//creating the content pane which will store all of the addcommentaryScreen components
 		GridBagLayout gbl_Pane = new GridBagLayout();
 		pane = new JPanel(gbl_Pane);
@@ -96,7 +104,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(10,10,10,10);
 		pane.add(scrollPane, c);
-		
+
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton selectMp3 = new JButton("Add Mp3 Commentary..");
 		c = new GridBagConstraints();
@@ -120,7 +128,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(textfield, c);*/
-		
+
 		//creating a JButton which allows you to delete the selected commentary.
 		JButton deleteRow = new JButton("Delete Commentary");
 		c = new GridBagConstraints();
@@ -143,7 +151,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.WEST;
 
 		pane.add(label1, c);
-*/
+		 */
 		//creating a Jbutton which will add commentary to the start of the video
 		/*JButton start = new JButton("Add at start of video");
 		c = new GridBagConstraints();
@@ -154,7 +162,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.insets = new Insets(0,5,0,10);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(start, c);*/
-		
+
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton createCommentary = new JButton("Create Commentary");
 		c = new GridBagConstraints();
@@ -165,7 +173,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.insets = new Insets(0,5,0,10);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
-		
+
 		textfield = new JTextField();
 		c = new GridBagConstraints();
 		c.gridx = 1;
@@ -177,7 +185,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.insets = new Insets(0,3,0,3);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.add(textfield, c);
-		
+
 		JLabel label1 = new JLabel("Hours/Minutes/Seconds");
 		c = new GridBagConstraints();
 		c.gridx = 3;
@@ -188,7 +196,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.insets = new Insets(0,1,0,1);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(label1, c);
-		
+
 		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,113,1);
 		hourSpinner = new JSpinner(hourSpinnerModel);
 		c = new GridBagConstraints();
@@ -211,7 +219,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.gridwidth = 1;
 		c.insets = new Insets(0,3,0,3);
 		pane.add(minuteSpinner, c);
-		
+
 
 		SpinnerModel secondSpinnerModel = new SpinnerNumberModel(0,0,60,1);
 		secondSpinner = new JSpinner(secondSpinnerModel);
@@ -224,33 +232,33 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(0,3,0,3);
 		pane.add(secondSpinner, c);
-		
+
 		JLabel one = new JLabel();
-		 c = new GridBagConstraints();
-		 c.gridx = 3;
-		 c.gridy = 2;
-		 c.weightx = 1;
-		 c.weighty = 1;
-		 pane.add(one, c);
-		 
-		 JLabel two = new JLabel();
-		 c = new GridBagConstraints();
-		 c.gridx = 2;
-		 c.gridy = 2;
-		 c.weightx = 1;
-		 c.weighty = 1;
-		 pane.add(two, c);
-		 
-		 JButton createVideo = new JButton("Create Video");
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 3;
-			c.gridwidth = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.anchor = GridBagConstraints.EAST;
-			//c.insets = new Insets(3,3,3,3);
-			pane.add(createVideo, c);
+		c = new GridBagConstraints();
+		c.gridx = 3;
+		c.gridy = 2;
+		c.weightx = 1;
+		c.weighty = 1;
+		pane.add(one, c);
+
+		JLabel two = new JLabel();
+		c = new GridBagConstraints();
+		c.gridx = 2;
+		c.gridy = 2;
+		c.weightx = 1;
+		c.weighty = 1;
+		pane.add(two, c);
+
+		JButton createVideo = new JButton("Create Video");
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.EAST;
+		//c.insets = new Insets(3,3,3,3);
+		pane.add(createVideo, c);
 
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
@@ -264,25 +272,31 @@ public class AddCommentaryScreen extends JFrame{
 				ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				ourFileSelector.setFileFilter(filter);
 
-				ourFileSelector.showOpenDialog(null);
-				if (!(ourFileSelector.getSelectedFile() == null)){
-					ourFile=ourFileSelector.getSelectedFile();
-					mediaPath=ourFile.getAbsolutePath();
-					 String hour=hourSpinner.getValue().toString();
-					 String minute=minuteSpinner.getValue().toString();
-					 String second=secondSpinner.getValue().toString();
-					 
-					if (hourSpinner.getValue().toString().length()<=1){
-						hour="0"+hourSpinner.getValue().toString();
+				int status = ourFileSelector.showOpenDialog(null);
+				if (status == JFileChooser.APPROVE_OPTION){
+					if (!(ourFileSelector.getSelectedFile() == null)){
+						ourFile=ourFileSelector.getSelectedFile();
+						mediaPath=ourFile.getAbsolutePath();
+						String hour=hourSpinner.getValue().toString();
+						String minute=minuteSpinner.getValue().toString();
+						String second=secondSpinner.getValue().toString();
+
+						if (hourSpinner.getValue().toString().length()<=1){
+							hour="0"+hourSpinner.getValue().toString();
+						}
+						if (minuteSpinner.getValue().toString().length()<=1){
+							minute="0"+minuteSpinner.getValue().toString();
+						}
+						if (secondSpinner.getValue().toString().length()<=1){
+							second="0"+secondSpinner.getValue().toString();
+						}
+						Object[] data = { ourFile.getName() , "gg", hour+":"+minute+":"+second, mediaPath};
+						audioOverlayTable.addRow(data);	
+					}else {
+						JOptionPane.showMessageDialog(null, "Error please select an appropriate file");
 					}
-					if (minuteSpinner.getValue().toString().length()<=1){
-						minute="0"+minuteSpinner.getValue().toString();
-					}
-					if (secondSpinner.getValue().toString().length()<=1){
-						second="0"+secondSpinner.getValue().toString();
-					}
-					Object[] data = { mediaPath , "gg", hour+":"+minute+":"+second};
-					audioOverlayTable.addRow(data);	
+				}else if (status == JFileChooser.CANCEL_OPTION){
+					
 				}
 			}
 		});
@@ -299,14 +313,14 @@ public class AddCommentaryScreen extends JFrame{
 				}
 			}
 		});*/
-		
-		 createCommentary.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
-				 String hour=hourSpinner.getValue().toString();
-				 String minute=minuteSpinner.getValue().toString();
-				 String second=secondSpinner.getValue().toString();
-				 
+
+		createCommentary.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String hour=hourSpinner.getValue().toString();
+				String minute=minuteSpinner.getValue().toString();
+				String second=secondSpinner.getValue().toString();
+
 				if (hourSpinner.getValue().toString().length()<=1){
 					hour="0"+hourSpinner.getValue().toString();
 				}
@@ -316,50 +330,50 @@ public class AddCommentaryScreen extends JFrame{
 				if (secondSpinner.getValue().toString().length()<=1){
 					second="0"+secondSpinner.getValue().toString();
 				}
-				Object[] data = { textfield.getText() , "gg", hour+":"+minute+":"+second};
+				TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,false);
+				tmpFile.execute();
+				Object[] data = { textfield.getText() , "gg", hour+":"+minute+":"+second,"/tmp/festSpeech"+counter+".mp3" };
+				counter++;
 				audioOverlayTable.addRow(data);
-			 }
-		 });
-		 
-			
-		 deleteRow.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
+			}
+		});
 
-				 int rowsSelected = table.getSelectedRows().length;
-				 for(int i=0; i<rowsSelected ; i++ ) {
 
-				     audioOverlayTable.removeRow(table.getSelectedRow());
-				 }
-				 	
-			        
-			 }
-		 });
-		 createVideo.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
-				 int totalRows = table.getRowCount();
-				 String cmd = "ffmpeg -y -i " + MainPlayerScreen.mediapath + " ";
-				 for (int i = 0 ; i<totalRows; i++){
-					String fileName = table.getValueAt(i,0).toString();
+		deleteRow.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				int rowsSelected = table.getSelectedRows().length;
+				for(int i=0; i<rowsSelected ; i++ ) {
+
+					audioOverlayTable.removeRow(table.getSelectedRow());
+				}
+
+
+			}
+		});
+		createVideo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int totalRows = table.getRowCount();
+				String cmd = "ffmpeg -y -i " + MainPlayerScreen.mediapath + " ";
+				for (int i = 0 ; i<totalRows; i++){
+					String fileName = table.getModel().getValueAt(i,3).toString();
 					String time = table.getValueAt(i,2).toString();
 					String[] splitArray = time.split(":");
 					int totalTime = Integer.parseInt(splitArray[0])*3600 + Integer.parseInt(splitArray[1])*60 + Integer.parseInt(splitArray[2]);
-					cmd = cmd+ "-itsoffset " + totalTime + " -i " + fileName + " ";
-				 }
-				 for (int i = 0 ; i<= totalRows; i++){
-					 cmd = cmd + "-map " + i +":0" + " ";
-
-				 }
-				 cmd = cmd + "-c:v copy -async 1 -filter_complex amix=inputs=" + (totalRows+1) + " ";
-				 //System.out.println(cmd);
-			     OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolFile",true);
-			     mergeVideo.execute();
-			 }
-		 });
-		 
-
-
+					cmd = cmd+ "-itsoffset " + totalTime + " -i \"" + fileName + "\" ";
+				}
+				cmd = cmd + "-map 0:v:0 ";
+				for (int i = 1 ; i<= totalRows; i++){
+					cmd = cmd + "-map " + i +":0" + " ";
+				}
+				cmd = cmd + "-c:v copy -async 1 -filter_complex amix=inputs=" + (totalRows+1) + " ";
+				//System.out.println(cmd);
+				OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true);
+				mergeVideo.execute();
+			}
+		});
 	}
 
 

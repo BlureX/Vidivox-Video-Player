@@ -476,7 +476,7 @@ public class MainPlayerScreen extends JFrame {
 					 rwswing.execute();
 					 rw=true;
 					 ff=false;
-					 //Press rewind button while not rewinding or fastforwarding will result in rewind 
+					 //Press rewind button while not rewinding or fast forwarding will result in rewind 
 					 //just being executed.
 				 }else if ((rw==false)&&(ff==false)){
 					 rwswing= new Skip(mediaPlayerComponent,-1000,mainplayer);
