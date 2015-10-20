@@ -46,7 +46,6 @@ public class MainPlayerScreen extends JFrame {
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
 	private boolean pressedWhilePlaying = false;
-	public static TextToMp3Screen createCommentaryScreen;
 	private int currentVolume;
 	private boolean ff=false, rw=false, refresh=false;
 	public long totaltime;
@@ -59,7 +58,7 @@ public class MainPlayerScreen extends JFrame {
 	GridBagConstraints c;
 
 	//Buttons, sliders and labels which are used in my GUI for users to click.
-	JButton fastforward, rewind, mute, play;
+	JButton fastforward, rewind, mute, play, addCommentaryButton;
 	JSlider volume;
 	public JSlider positionSlider;
 	JLabel volumeLabel,timeLabel,endLabel;
@@ -67,7 +66,7 @@ public class MainPlayerScreen extends JFrame {
 	//Menu at the top which allows users to select their appropriate options.
 	JMenuBar menuBar;
 	JMenu video, audio;
-	JMenuItem openVideo, saveVideo, saveVideoAs, addCommentary, createCommentary;
+	JMenuItem openVideo, saveVideo, saveVideoAs, createCommentary;
 
 	/**
 	 * Main Method used to start my application.
@@ -81,14 +80,12 @@ public class MainPlayerScreen extends JFrame {
 		frame.setBounds(300, 200, 820, 650);
 		frame.setMinimumSize(new Dimension(820, 1));
 		frame.setVisible(true);
-		createCommentaryScreen = new TextToMp3Screen(frame);
-		createCommentaryScreen.setBounds(385, 475, 650, 100);
-		createCommentaryScreen.setMinimumSize(new Dimension(650, 100));
+
 		loadingScreen.setBounds(510, 495, 400, 60);
 		loadingScreen.setMinimumSize(new Dimension(400, 60));
-		addCommentaryScreen = new AddCommentaryScreen();
-		addCommentaryScreen.setBounds(285, 475, 850, 100);
-		addCommentaryScreen.setMinimumSize(new Dimension(650, 100));
+		addCommentaryScreen = new AddCommentaryScreen(frame);
+		addCommentaryScreen.setBounds(285, 475, 850, 500);
+		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
 	}
 
 	/**
@@ -261,6 +258,7 @@ public class MainPlayerScreen extends JFrame {
 		 c.gridwidth = 3;
 		 c.anchor = GridBagConstraints.SOUTH;
 		 c.fill = GridBagConstraints.HORIZONTAL;
+		 c.insets = new Insets(0,10,10,10);
 		 topPane.add(bottomPane, c);
 
 		 //Adding a Jlabel which will be the starting time of the video
@@ -324,17 +322,7 @@ public class MainPlayerScreen extends JFrame {
 		 saveVideoAs = new JMenuItem("Save Video as...");	
 		 video.add(saveVideoAs);	
 
-		 //audio menu tab
-		 audio = new JMenu("Audio");
-		 menuBar.add(audio);
 
-		 //create commentary button
-		 createCommentary = new JMenuItem("Create Commentary");	
-		 audio.add(createCommentary);
-
-		 //add commentary button
-		 addCommentary = new JMenuItem("Add Commentary");	
-		 audio.add(addCommentary);
 
 		 //Adding in the video area where a mp4 can be played
 		 mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
@@ -371,7 +359,7 @@ public class MainPlayerScreen extends JFrame {
 		 c.weightx = 0;
 		 c.weighty = 1;
 		 c.insets = new Insets(0,10,0,5);
-		 //	c.anchor = GridBagConstraints.WEST;
+		 c.anchor = GridBagConstraints.WEST;
 		 bottomPane.add(rewind, c);
 
 		 //JButton which Plays the video
@@ -417,20 +405,33 @@ public class MainPlayerScreen extends JFrame {
 		 bottomPane.add(volume, c);
 
 		 //adding empty jlabels to the control panel to space out the buttons nicely
-		 JLabel one = new JLabel();
-		 c = new GridBagConstraints();
-		 c.gridx = 0;
-		 c.gridy = 0;
-		 c.weightx = 1;
-		 c.weighty = 1;
-		 bottomPane.add(one, c);
-		 JLabel two = new JLabel();
+		 //JLabel one = new JLabel();
+		 //c = new GridBagConstraints();
+		 //c.gridx = 0;
+		 //c.gridy = 0;
+		 //c.weightx = 1;
+		 //c.weighty = 1;
+		 //bottomPane.add(one, c);
+		 /*JLabel two = new JLabel();
 		 c = new GridBagConstraints();
 		 c.gridx = 4;
 		 c.gridy = 0;
 		 c.weightx = 1;
 		 c.weighty = 1;
-		 bottomPane.add(two, c);
+		 bottomPane.add(two, c);*/
+		 
+		 //JSlider which controls the volume of the video
+		 addCommentaryButton = new JButton("Add Commentary");
+		 c = new GridBagConstraints();
+		 c.gridx = 8;
+		 c.gridy = 0;
+		 c.weightx = 0;
+		 c.weighty = 1;
+		 c.insets = new Insets(0,10,0,10);
+		 c.anchor = GridBagConstraints.EAST;
+		 bottomPane.add(addCommentaryButton, c);
+
+		 
 	 }
 	 
 	 public void setUpListeners(){
@@ -608,18 +609,23 @@ public class MainPlayerScreen extends JFrame {
 		 });
 
 		 //Allows the user to create commentary.
-		 createCommentary.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
 
-				 createCommentaryScreen.setVisible(true);
-			 }
-		 });
 
 		 //Allows the user to add commentary.
-		 addCommentary.addActionListener(new ActionListener() {
+		 addCommentaryButton.addActionListener(new ActionListener() {
 			 @Override
 			 public void actionPerformed(ActionEvent e) {
+				 if (ff==true){
+					 ffswing.cancel(true);
+				 }
+				 if (rw==true){
+					 rwswing.cancel(true);
+				 }
+				 ff=false;
+				 rw=false;
+				 play.setText("play");
+				 mediaPlayerComponent.getMediaPlayer().setPause(true);
+				 
 				 if (MainPlayerScreen.mediapath == null){
 					 JOptionPane.showMessageDialog(null, "Error please open a video before trying to add commentary");
 				 }else{

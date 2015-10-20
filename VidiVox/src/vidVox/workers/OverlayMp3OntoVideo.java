@@ -43,7 +43,6 @@ public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 		TextToMp3Screen.mainPlayerScreen.run();
 		TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(false);
 		TextToMp3Screen.videoNumber++;
-		MainPlayerScreen.createCommentaryScreen.setVisible(false);
 	}
 
 }
