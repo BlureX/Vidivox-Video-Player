@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -259,6 +258,42 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.EAST;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(createVideo, c);
+		
+		JButton previewCommentary = new JButton("Create Video");
+		c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.EAST;
+		//c.insets = new Insets(3,3,3,3);
+		pane.add(previewCommentary, c);
+		
+		/*
+		JButton editCommentary = new JButton("Edit Commentary");
+		c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
+		//c.insets = new Insets(3,3,3,3);
+		pane.add(editCommentary, c);
+		
+		JButton editTime = new JButton("Edit Time");
+		c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
+		//c.insets = new Insets(3,3,3,3);
+		pane.add(editTime, c);
+		*/
+		
 
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
@@ -352,6 +387,7 @@ public class AddCommentaryScreen extends JFrame{
 
 			}
 		});
+		
 		createVideo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -374,6 +410,32 @@ public class AddCommentaryScreen extends JFrame{
 				mergeVideo.execute();
 			}
 		});
+		/*
+		editCommentary.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int[] rowsSelected = table.getSelectedRows();
+				for(int i=0; i<rowsSelected.length ; i++ ) {
+					audioOverlayTable.setValueAt(textfield.getText(), rowsSelected[i], 0);
+				}
+				TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,false);
+				tmpFile.execute();
+				counter++;
+			}
+		});
+		
+		editTime.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int[] rowsSelected = table.getSelectedRows();
+				
+				for(int i=0; i<rowsSelected.length ; i++ ) {
+					audioOverlayTable.setValueAt(textfield.getText(), rowsSelected[i], 0);
+				}
+				
+			}
+		});
+		*/
 	}
 
 

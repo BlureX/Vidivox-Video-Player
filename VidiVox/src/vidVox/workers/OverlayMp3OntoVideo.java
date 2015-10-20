@@ -53,7 +53,5 @@ public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 }
 
 
-//ffmpeg -y -i video.mp4 -i audio.mp3 -filter_complex amix -strict -2 out.mp4
 
-//ffmpeg -y -i /afs/ec.auckland.ac.nz/users/b/m/bmit436/unixhome/bunny1.mp4 -i /tmp/hellohoi.mp3 -filter_complex amix -strict -2 /afs/ec.auckland.ac.nz/users/b/m/bmit436/unixhome/bunny1.mp4
 
