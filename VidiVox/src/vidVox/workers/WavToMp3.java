@@ -4,14 +4,17 @@ import java.lang.reflect.*;
 import java.text.DateFormat.Field;
 import javax.swing.SwingWorker;
 
+import vidVox.guiScreens.AddCommentaryScreen;
+
 public class WavToMp3 extends SwingWorker<Void, String>{
 	//
 	//location = location of where the mp3 will be saved
 	//filename = what the file is called
 	private String location;
 	private String filename;
-	private Boolean overlay;
-
+	private AddCommentaryScreen commentary;
+	String hour,minute,second;
+	private String  commentaryContent;
 	@Override
 	protected Void doInBackground() throws Exception {
 
@@ -36,20 +39,20 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 		return null;
 	}
 
-	public WavToMp3 (String location, String filename, Boolean overlay){
+	public WavToMp3 (String location, String filename,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
 		this.location = location;
 		this.filename = filename;
-		this.overlay = overlay;
+		this.commentary=commentary;
+		this.hour=hour;
+		this.minute=minute;
+		this.second=second;
+		this.commentaryContent= commentaryContent;
 	}
 
 	protected void done(){
-		//if this mp3 needs to be overlayed
-		/*if (overlay){
-			OverlayMp3OntoVideo k = new OverlayMp3OntoVideo(this.location, this.filename, this.overlay);
-			k.execute();
-			// do the overlay 
-
-		}*/
+		GetDuration duration = new GetDuration(this.location,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
+		duration.execute();
+		
 	}
 
 }

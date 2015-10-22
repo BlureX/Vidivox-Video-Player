@@ -4,6 +4,8 @@ import java.lang.reflect.*;
 import java.text.DateFormat.Field;
 import javax.swing.SwingWorker;
 
+import vidVox.guiScreens.AddCommentaryScreen;
+
 public class TextToFile extends SwingWorker<Void, String>{
 	//
 	//text = text that needs to be spoken in the mp3
@@ -12,10 +14,12 @@ public class TextToFile extends SwingWorker<Void, String>{
 	private String filename;
 	private String location;
 	private Boolean overlay;
-
+	private AddCommentaryScreen commentary;
+	private String commentaryContent;
+	String hour,minute,second;
 	@Override
 	protected Void doInBackground() throws Exception {
-
+		commentaryContent = text;
 		text = text.trim();
 		filename = text.replaceAll("\\s+","");
 		location = location.replaceAll("\\s+","");
@@ -33,14 +37,18 @@ public class TextToFile extends SwingWorker<Void, String>{
 	}
 
 	//text is the text which needs to be spoken
-	public TextToFile (String text, String location, Boolean overlay){
+	public TextToFile (String text, String location, AddCommentaryScreen commentary,String hour, String minute,String second){
 		this.text = text;
 		this.location = location;
-		this.overlay = overlay;
+		this.commentary=commentary;
+		this.hour=hour;
+		this.minute=minute;
+		this.second=second;
 	}
+	
 	//This is the done method which will turn my text to a wave file.
 	protected void done(){
-		TextToWav k = new TextToWav(this.location, this.filename, this.overlay);
+		TextToWav k = new TextToWav(this.location, this.filename, this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
 		k.execute();
 
 	}

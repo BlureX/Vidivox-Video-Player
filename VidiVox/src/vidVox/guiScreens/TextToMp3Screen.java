@@ -135,8 +135,8 @@ public class TextToMp3Screen extends JFrame {
 						mediaPath=ourFile.getAbsolutePath();
 
 						//creates the mp3 file at the location
-						TextToFile k = new TextToFile(textbox.getText(), mediaPath, false);
-						k.execute();
+						//TextToFile k = new TextToFile(textbox.getText(), mediaPath, false,);
+						//k.execute();
 					}
 				}
 			}
@@ -146,9 +146,7 @@ public class TextToMp3Screen extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (textbox.getText().length() > 75 || textbox.getText().length() < 1){
-
 					JOptionPane.showMessageDialog(null, "Error please enter between 1-75 characters");
-
 				}else if (MainPlayerScreen.mediapath == null){
 					JOptionPane.showMessageDialog(null, "Error open a video before adding commentary please");
 				}else if (textbox.getText().trim().equals("")){
@@ -157,8 +155,8 @@ public class TextToMp3Screen extends JFrame {
 
 					//creates a mp3 file, places it in tmp and overlays the audio
 					String path = "/tmp/"+textbox.getText();
-					TextToFile k = new TextToFile(textbox.getText(), path, true);
-					k.execute();
+					//TextToFile k = new TextToFile(textbox.getText(), path, true);
+					//k.execute();
 				}
 			}
 		});

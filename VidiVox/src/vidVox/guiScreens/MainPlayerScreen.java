@@ -109,7 +109,7 @@ public class MainPlayerScreen extends JFrame {
 							 options[0]);
 					 if (choice == 0) {
 						 if (MainPlayerScreen.mediapath == null){
-							 JOptionPane.showMessageDialog(null, "error please open a video before trying to save");
+							 JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 						 } else { 
 							 MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo);
 							 k.execute();
@@ -405,22 +405,6 @@ public class MainPlayerScreen extends JFrame {
 		 c.weighty = 1;
 		 c.insets = new Insets(0,10,0,10);
 		 bottomPane.add(volume, c);
-
-		 //adding empty jlabels to the control panel to space out the buttons nicely
-		 //JLabel one = new JLabel();
-		 //c = new GridBagConstraints();
-		 //c.gridx = 0;
-		 //c.gridy = 0;
-		 //c.weightx = 1;
-		 //c.weighty = 1;
-		 //bottomPane.add(one, c);
-		 /*JLabel two = new JLabel();
-		 c = new GridBagConstraints();
-		 c.gridx = 4;
-		 c.gridy = 0;
-		 c.weightx = 1;
-		 c.weighty = 1;
-		 bottomPane.add(two, c);*/
 		 
 		 //JSlider which controls the volume of the video
 		 addCommentaryButton = new JButton("Add Commentary");
@@ -610,9 +594,6 @@ public class MainPlayerScreen extends JFrame {
 			 }
 		 });
 
-		 //Allows the user to create commentary.
-
-
 		 //Allows the user to add commentary.
 		 addCommentaryButton.addActionListener(new ActionListener() {
 			 @Override
@@ -635,7 +616,6 @@ public class MainPlayerScreen extends JFrame {
 				 }
 			 }
 		 });
-
 		 //Allows the user to save video.
 		 saveVideo.addActionListener(new ActionListener() {
 			 @Override
@@ -648,7 +628,6 @@ public class MainPlayerScreen extends JFrame {
 				 }
 			 }
 		 });
-
 		 //Allows the user to save Video as.
 		 saveVideoAs.addActionListener(new ActionListener() {
 			 @Override
