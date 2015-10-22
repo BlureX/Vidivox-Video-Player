@@ -18,6 +18,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
+
+import playback.VolumeControl;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
@@ -40,7 +42,7 @@ public class MainPlayerScreen extends JFrame {
 	//Fields which are used within this class and package.
 	MainPlayerScreen mainplayer = this;
 	private JPanel topPane, bottomPane;
-	private EmbeddedMediaPlayerComponent mediaPlayerComponent;
+	public EmbeddedMediaPlayerComponent mediaPlayerComponent;
 	Skip ffswing, rwswing;
 	public static String mediapath;
 	public static LoadingScreen loadingScreen = new LoadingScreen();
@@ -51,6 +53,7 @@ public class MainPlayerScreen extends JFrame {
 	public long totaltime;
 	private ChangeListener listener;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	VolumeControl volumeFunctionality;
 
 	//Set up the GridBag Layout for my screen.
 	GridBagLayout gbl_topPane;
@@ -374,38 +377,41 @@ public class MainPlayerScreen extends JFrame {
 		 c.insets = new Insets(0,5,0,5);
 		 bottomPane.add(play, c);
 
-		 //Volume label
-		 volumeLabel = new JLabel("Volume");
-		 c = new GridBagConstraints();
-		 c.gridx = 5;
-		 c.gridy = 0;
-		 c.weightx = 0;
-		 c.weighty = 1;
-		 c.insets = new Insets(0,20,0,10);
-		 c.anchor = GridBagConstraints.WEST;
-		 bottomPane.add(volumeLabel, c);
-
-		 //JButton which mutes the audio of the video
-		 mute = new JButton("Mute");
-		 c = new GridBagConstraints();
-		 c.gridx = 7;
-		 c.gridy = 0;
-		 c.weightx = 0;
-		 c.weighty = 1;
-		 c.insets = new Insets(0,10,0,10);
-		 c.anchor = GridBagConstraints.EAST;
-		 bottomPane.add(mute, c);
-
-		 //JSlider which controls the volume of the video
-		 volume = new JSlider();
-		 c = new GridBagConstraints();
-		 c.gridx = 6;
-		 c.gridy = 0;
-		 c.weightx = 0;
-		 c.weighty = 1;
-		 c.insets = new Insets(0,10,0,10);
-		 bottomPane.add(volume, c);
+//		 //Volume label
+//		 volumeLabel = new JLabel("Volume");
+//		 c = new GridBagConstraints();
+//		 c.gridx = 5;
+//		 c.gridy = 0;
+//		 c.weightx = 0;
+//		 c.weighty = 1;
+//		 c.insets = new Insets(0,20,0,10);
+//		 c.anchor = GridBagConstraints.WEST;
+//		 bottomPane.add(volumeLabel, c);
+//
+//		 //JButton which mutes the audio of the video
+//		 mute = new JButton("Mute");
+//		 c = new GridBagConstraints();
+//		 c.gridx = 7;
+//		 c.gridy = 0;
+//		 c.weightx = 0;
+//		 c.weighty = 1;
+//		 c.insets = new Insets(0,10,0,10);
+//		 c.anchor = GridBagConstraints.EAST;
+//		 bottomPane.add(mute, c);
+//
+//		 //JSlider which controls the volume of the video
+//		 volume = new JSlider();
+//		 c = new GridBagConstraints();
+//		 c.gridx = 6;
+//		 c.gridy = 0;
+//		 c.weightx = 0;
+//		 c.weighty = 1;
+//		 c.insets = new Insets(0,10,0,10);
+//		 bottomPane.add(volume, c);
 		 
+		 volumeFunctionality = new VolumeControl(mainplayer,c);
+		 volumeFunctionality.setUpVolume(bottomPane);
+		
 		 //JSlider which controls the volume of the video
 		 addCommentaryButton = new JButton("Add Commentary");
 		 c = new GridBagConstraints();
@@ -422,6 +428,7 @@ public class MainPlayerScreen extends JFrame {
 	 
 	 public void setUpListeners(){
 		 //Adds an action listener when the play button is clicked.
+		 volumeFunctionality.setUpListener();
 		 play.addActionListener(new ActionListener() {
 			 @Override
 			 public void actionPerformed(ActionEvent e) {
@@ -532,40 +539,40 @@ public class MainPlayerScreen extends JFrame {
 				 }
 			 }
 		 });
-		 //This will allow you to identify when the volume bar is being changed and then set the value to the position
-		 //of the slider to the correct volume.
-		 volume.addChangeListener(new ChangeListener() {
-			 @Override
-			 public void stateChanged(ChangeEvent e) {
-				 JSlider source = (JSlider)e.getSource();
-				 mediaPlayerComponent.getMediaPlayer().setVolume(source.getValue());
-			 }
-		 });
-		 //This will allow you to click anywhere on the volume slider and this will update the volume bar 
-		 volume.addMouseListener(new MouseAdapter(){
-			 public void mouseClicked(MouseEvent e)
-			 {
-				 JSlider sourceSlider=(JSlider)e.getSource();
-				 BasicSliderUI ui = (BasicSliderUI)sourceSlider.getUI();
-				 int value = ui.valueForXPosition( e.getX() );
-				 volume.setValue(value);
-			 }
-		 });
-		 //This will allow you to mute the volume or unmute it back to the previous value.
-		 mute.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
-				 //Checks if volume is not already muted and if not, mute it.
-				 if (volume.getValue() != 0 ) {
-					 currentVolume = volume.getValue();
-					 volume.setValue(0);
-					 //mediaPlayerComponent.getMediaPlayer().mute();
-					 //If muted already, and clicked mute again, it will refer back to the previous value it was just before being muted.
-				 } else {
-					 volume.setValue(currentVolume);
-				 }
-			 }
-		 });
+//		 //This will allow you to identify when the volume bar is being changed and then set the value to the position
+//		 //of the slider to the correct volume.
+//		 volume.addChangeListener(new ChangeListener() {
+//			 @Override
+//			 public void stateChanged(ChangeEvent e) {
+//				 JSlider source = (JSlider)e.getSource();
+//				 mediaPlayerComponent.getMediaPlayer().setVolume(source.getValue());
+//			 }
+//		 });
+//		 //This will allow you to click anywhere on the volume slider and this will update the volume bar 
+//		 volume.addMouseListener(new MouseAdapter(){
+//			 public void mouseClicked(MouseEvent e)
+//			 {
+//				 JSlider sourceSlider=(JSlider)e.getSource();
+//				 BasicSliderUI ui = (BasicSliderUI)sourceSlider.getUI();
+//				 int value = ui.valueForXPosition( e.getX() );
+//				 volume.setValue(value);
+//			 }
+//		 });
+//		 //This will allow you to mute the volume or unmute it back to the previous value.
+//		 mute.addActionListener(new ActionListener() {
+//			 @Override
+//			 public void actionPerformed(ActionEvent e) {
+//				 //Checks if volume is not already muted and if not, mute it.
+//				 if (volume.getValue() != 0 ) {
+//					 currentVolume = volume.getValue();
+//					 volume.setValue(0);
+//					 //mediaPlayerComponent.getMediaPlayer().mute();
+//					 //If muted already, and clicked mute again, it will refer back to the previous value it was just before being muted.
+//				 } else {
+//					 volume.setValue(currentVolume);
+//				 }
+//			 }
+//		 });
 		 //This will allow you to choose a file and play it.
 		 openVideo.addActionListener(new ActionListener() {
 			 @Override
