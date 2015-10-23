@@ -20,7 +20,7 @@ public class SaveVideoAs {
 
 		//opening the save file explorer, user gets to choose where to save the file   
 		if (MainPlayerScreen.mediapath == null){
-			JOptionPane.showMessageDialog(null, "error please open a video before trying to save");
+			JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 		}else{
 			//adding a file filter for saving as mp4 and avi
 			FileFilter filter = new FileNameExtensionFilter("MP4 & AVI","mp4","avi");

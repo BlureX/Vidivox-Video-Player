@@ -35,7 +35,8 @@ public class Skip extends SwingWorker<Void,Integer>{
 			//This will check for when it is fastforwarding and reaches end of video, it will pause it
 			//otherwise it will operate normally or it can rewind when it reaches end of video.
 			if((positionValue > 0.99f)&&(skipRate != -1000)) {
-				media.getMediaPlayer().pause();
+				media.getMediaPlayer().stop();
+				player.play.setText("play");
 			}else{ 
 				publish();
 			}

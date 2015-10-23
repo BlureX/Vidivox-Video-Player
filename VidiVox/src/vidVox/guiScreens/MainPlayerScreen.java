@@ -90,7 +90,6 @@ public class MainPlayerScreen extends JFrame {
 	 * Constructor for my class.
 	 */
 	public MainPlayerScreen() {
-
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				if (!(mediapath == TextToMp3Screen.originalVideo)){
@@ -176,6 +175,8 @@ public class MainPlayerScreen extends JFrame {
 				mediaPlayerComponent.getMediaPlayer().setPause(true);
 			}
 		}
+		//Set the title of the video.
+		
 		//Gets the current time and position and updates them in the GUI.
 		long time = mediaPlayerComponent.getMediaPlayer().getTime();
 		int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
@@ -219,6 +220,7 @@ public class MainPlayerScreen extends JFrame {
 
 	private void setUpLayout(){
 		//creating the content pane which will store all of the video components
+		setTitle("");
 		gbl_topPane = new GridBagLayout();
 		topPane = new JPanel(gbl_topPane);
 		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -331,9 +333,11 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,5,0,5);
 		bottomPane.add(play, c);
 
+		//This will set up the volume controls such as mute and volume slider.
 		volumeFunctionality = new VolumeControl(mainplayer,c);
 		volumeFunctionality.setUpVolume(bottomPane);
 
+		//This will set up the progress bar for my video controller.
 		progressSlider=new PositionSlider(mainplayer,c);
 		progressSlider.setUpPositionSlider(topPane);
 
@@ -349,7 +353,9 @@ public class MainPlayerScreen extends JFrame {
 		bottomPane.add(addCommentaryButton, c);	 
 	}
 	public void setUpListeners(){
+		//Sets up action listener for volume slider and mute button.
 		volumeFunctionality.setUpListener();
+		//Sets up action listener for progress slider.
 		progressSlider.setUpListeners();
 		//Adds an action listener when the play button is clicked.
 
@@ -483,6 +489,7 @@ public class MainPlayerScreen extends JFrame {
 					rw=false;
 					play.setText("pause");
 					run();
+					setTitle(OpenVideo.videoName);
 				}
 				if (play.getText().equals("pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
