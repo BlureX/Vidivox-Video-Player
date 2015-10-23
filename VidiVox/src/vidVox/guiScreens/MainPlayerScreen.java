@@ -15,8 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
-import playback.PositionSlider;
-import playback.VolumeControl;
+import playercontrol.PositionSlider;
+import playercontrol.VideoMenu;
+import playercontrol.VideoTime;
+import playercontrol.VolumeControl;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
@@ -44,27 +46,24 @@ public class MainPlayerScreen extends JFrame {
 	public static AddCommentaryScreen addCommentaryScreen;
 	private boolean pressedWhilePlaying = false;
 	private boolean ff=false, rw=false;
-	public long totaltime;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	VolumeControl volumeFunctionality;
 	public PositionSlider progressSlider;
-
+	VideoTime videoTime;
 	//Set up the GridBag Layout for my screen.
 	GridBagLayout gbl_topPane;
 	GridBagLayout gbl_bottomPane;
 	GridBagConstraints c;
-
+	
 	//Buttons, sliders and labels which are used in my GUI for users to click.
-	JButton fastforward, rewind, mute;
+	JButton fastforward, rewind;
 	public JButton play;
 	JButton addCommentaryButton;
-	JSlider volume;
-	JLabel volumeLabel,timeLabel,endLabel;
+
+	public SaveVideoAs saveVideo = new SaveVideoAs();
 
 	//Menu at the top which allows users to select their appropriate options.
-	JMenuBar menuBar;
-	JMenu video, audio;
-	JMenuItem openVideo, saveVideo, saveVideoAs, createCommentary;
+	VideoMenu videoMenu;
 
 	/**
 	 * Main Method used to start my application.
@@ -111,7 +110,7 @@ public class MainPlayerScreen extends JFrame {
 						}
 					} else if (choice == 1) {
 						//save video as
-						SaveVideoAs.saveVideoAs();
+						saveVideo.saveVideoAs();
 					} else {
 						//closing without saving 
 					}
@@ -145,9 +144,9 @@ public class MainPlayerScreen extends JFrame {
 			@Override
 			public void run() {
 				if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
-					updateTime(time);
+					videoTime.updateTime(time);
 					progressSlider.updatePosition(position);
-					updateDuration(duration);
+					videoTime.updateDuration(duration);
 				}
 			}
 		});
@@ -155,11 +154,7 @@ public class MainPlayerScreen extends JFrame {
 		executorService.scheduleAtFixedRate(new UpdateRunnable(mediaPlayerComponent), 0, 100, TimeUnit.MILLISECONDS);
 	}
 
-	//This will get the total length of the video.
-	public void updateDuration(long millis) {
-		String s = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-		endLabel.setText(s);
-	}
+
 
 	//Update the UI as it plays.
 	public void updateGUI() {
@@ -180,15 +175,11 @@ public class MainPlayerScreen extends JFrame {
 		//Gets the current time and position and updates them in the GUI.
 		long time = mediaPlayerComponent.getMediaPlayer().getTime();
 		int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
-		updateTime(time);
+		videoTime.updateTime(time);
 		progressSlider.updatePosition(position);
 	}
 
-	//This function will update the time based on where it is in the video.
-	private void updateTime(long millis) {
-		String s = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-		timeLabel.setText(s);
-	}
+
 
 	//Class which is used to update the GUI.
 	private final class UpdateRunnable implements Runnable {
@@ -209,9 +200,9 @@ public class MainPlayerScreen extends JFrame {
 				public void run() {
 					if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 						//Updates time position and duration.
-						updateTime(time);
+						videoTime.updateTime(time);
 						progressSlider.updatePosition(position);
-						updateDuration(duration);
+						videoTime.updateDuration(duration);
 					}
 				}
 			});
@@ -240,50 +231,11 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,10,10,10);
 		topPane.add(bottomPane, c);
 
-		//Adding a Jlabel which will be the starting time of the video
-		timeLabel = new JLabel("00:00:00");
-		c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 1;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(0,10,10,10);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		topPane.add(timeLabel, c);
-
-		//Adding a Jlabel which will be the ending time of the video
-		endLabel = new JLabel("00:00:00");
-		c = new GridBagConstraints();
-		c.gridx = 2;
-		c.gridy = 1;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(0,10,10,10);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		topPane.add(endLabel, c);
-
 		//Creates a Menu bar for the frame
-		menuBar = new JMenuBar();
-		c = new GridBagConstraints();	
+		videoMenu= new VideoMenu(mainplayer);
+		JMenuBar menuBar = videoMenu.setUpMenuBar();
 		setJMenuBar(menuBar);
 
-		//adds a menu to the menu bar
-		video = new JMenu("Video");
-		menuBar.add(video);
-
-		//open video button
-		openVideo = new JMenuItem("Open Video...");	
-		video.add(openVideo);
-
-		//save video button
-		saveVideo = new JMenuItem("Save Video...");	
-		video.add(saveVideo);		
-
-		//save video as button
-		saveVideoAs = new JMenuItem("Save Video as...");	
-		video.add(saveVideoAs);	
 
 		//Adding in the video area where a mp4 can be played
 		mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
@@ -341,6 +293,8 @@ public class MainPlayerScreen extends JFrame {
 		progressSlider=new PositionSlider(mainplayer,c);
 		progressSlider.setUpPositionSlider(topPane);
 
+		videoTime = new VideoTime(mainplayer);
+		videoTime.setUpTime(topPane);
 		//JSlider which controls the volume of the video
 		addCommentaryButton = new JButton("Add Commentary");
 		c = new GridBagConstraints();
@@ -351,27 +305,36 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,10,0,10);
 		c.anchor = GridBagConstraints.EAST;
 		bottomPane.add(addCommentaryButton, c);	 
+		
+		
+	}
+	//This will check if rewind and fastforward and currently on and turn them off.
+	public void turnOffRewindAndFastforward(){
+		if (ff==true){
+			ffswing.cancel(true);
+		}
+		if (rw==true){
+			rwswing.cancel(true);
+		}
+		ff=false;
+		rw=false;
 	}
 	public void setUpListeners(){
 		//Sets up action listener for volume slider and mute button.
 		volumeFunctionality.setUpListener();
 		//Sets up action listener for progress slider.
 		progressSlider.setUpListeners();
+		
+		//This will set up the video menu bar
+		videoMenu.setUpMenuListeners();
+		
 		//Adds an action listener when the play button is clicked.
-
 		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Check if fast forwarding or rewind is on when the play/pause button is clicked
 				//and will cancel it.
-				if (ff==true){
-					ffswing.cancel(true);
-					ff=false;
-				}
-				if (rw==true){
-					rwswing.cancel(true);
-					rw=false;
-				}
+				turnOffRewindAndFastforward();
 				//Pauses or plays the video depending if it is playing or paused respectively and also
 				//changes the text of the button to add a more user friendly experience.
 				if (play.getText().equals("play")){
@@ -469,35 +432,6 @@ public class MainPlayerScreen extends JFrame {
 				}
 			}
 		});
-		//This will allow you to choose a file and play it.
-		openVideo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Pauses the current video being played if any.
-				mediaPlayerComponent.getMediaPlayer().setPause(true);
-				//Check if the user grabbed a file.
-				boolean openfile=OpenVideo.grabFile();
-				if (openfile){
-					mediapath=OpenVideo.mediaPath;
-					if (ff==true){
-						ffswing.cancel(true);
-					}
-					if (rw==true){
-						rwswing.cancel(true);
-					}
-					ff=false;
-					rw=false;
-					play.setText("pause");
-					run();
-					setTitle(OpenVideo.videoName);
-				}
-				if (play.getText().equals("pause")){
-					//If user decided to cancel the operation, it will continue playing the video if it is being played.
-					mediaPlayerComponent.getMediaPlayer().play();
-				}
-			}
-		});
-
 		//Allows the user to add commentary.
 		addCommentaryButton.addActionListener(new ActionListener() {
 			@Override
@@ -518,26 +452,6 @@ public class MainPlayerScreen extends JFrame {
 				}else{
 					addCommentaryScreen.setVisible(true);
 				}
-			}
-		});
-		//Allows the user to save video.
-		saveVideo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (MainPlayerScreen.mediapath == null){
-					JOptionPane.showMessageDialog(null, "Error please open a video before trying to save.");
-				}else{
-					MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo);
-					k.execute();
-				}
-			}
-		});
-		//Allows the user to save Video as.
-		saveVideoAs.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
-				SaveVideoAs.saveVideoAs();
 			}
 		});
 		//Checks for when the video is finished and if it is, it will stop the video and user will need to play video again.

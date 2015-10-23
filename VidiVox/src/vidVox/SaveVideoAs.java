@@ -12,7 +12,7 @@ import vidVox.guiScreens.SaveDialogScreen;
 
 public class SaveVideoAs {
 
-	public static void saveVideoAs(){
+	public void saveVideoAs(){
 		//
 		//applying a mp4 filter
 		String mediaPath1;
@@ -23,6 +23,7 @@ public class SaveVideoAs {
 			JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 		}else{
 			//adding a file filter for saving as mp4 and avi
+			System.out.println("GG");
 			FileFilter filter = new FileNameExtensionFilter("MP4 & AVI","mp4","avi");
 			SaveDialogScreen.ourFileSelector.resetChoosableFileFilters();
 			SaveDialogScreen.ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -32,12 +33,12 @@ public class SaveVideoAs {
 			if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
 				ourFile1=SaveDialogScreen.ourFileSelector.getSelectedFile();
 				mediaPath1=ourFile1.getAbsolutePath();
-
+				System.out.println(mediaPath1);
 				if ((!(mediaPath1.endsWith(".mp4"))) && (!(mediaPath1.endsWith(".avi")))) {
-					mediaPath1 = mediaPath1+".mp4";
+					mediaPath1 = mediaPath1+".avi";
 				}
-
 				MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1);
+				System.out.println("GGSONNY");
 				k.execute();
 			}
 		}

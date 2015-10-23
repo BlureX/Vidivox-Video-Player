@@ -13,8 +13,10 @@ public class MoveFile extends SwingWorker<Void, String>{
 	//Background process which just copies and pastes a file into a certain location specified by the constructor.
 	@Override
 	protected Void doInBackground() throws Exception {
-		//
+		System.out.println(location);
+		System.out.println(file);
 		String cmd = "cp "+"\""+file+"\""+" "+"\""+location+"\"";
+		System.out.println(cmd);
 		ProcessBuilder x = new ProcessBuilder("/bin/bash", "-c", cmd );
 
 		try {

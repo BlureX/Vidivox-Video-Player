@@ -18,23 +18,19 @@ public class GetDuration extends SwingWorker<Void,String>{
 	@Override
 	protected Void doInBackground() throws Exception {
 
-		//creating the bash process which will speak the user high score in festival
-		//String cmd = "echo "+"\""+text+"\""+" | festival --tts";
-		System.out.println(file);
+		//creating the bash process which will calculate the duration of the video
 		String cmd=	"ffprobe -i \"" + file + "\" -show_entries format=duration 2>&1 | grep \"duration=\"";
 		ProcessBuilder x = new ProcessBuilder("/bin/bash", "-c", cmd );
-
-		
-		
 		try {
 			Process process = x.start();
+			//Read the stdout message
 			InputStream stdout = process.getInputStream();
 			BufferedReader stdoutBuffered = new BufferedReader(new InputStreamReader(stdout));
+			//This will grab the duration which is outputted in the curent format duration=13:03:21000
 			line = stdoutBuffered.readLine();
-			System.out.println(line);
 			String[] temp=line.split("=");
+			//Grabs the second part after the equals
 			line=temp[1];
-			System.out.println(line);
 			process.waitFor();
 			stdoutBuffered.close();
 		} catch (IOException e) {
@@ -43,7 +39,7 @@ public class GetDuration extends SwingWorker<Void,String>{
 		}
 		return null;
 	}
-	//Constructor
+	//Constructor for GetDuration
 	public GetDuration(String file,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
 		this.file = file;
 		this.commentary=commentary;
@@ -53,6 +49,7 @@ public class GetDuration extends SwingWorker<Void,String>{
 		this.commentaryContent= commentaryContent;
 	}
 
+	//This will add to the table after it has calculated the duration of the commentary or mp3file.
 	@Override
 	public void done(){
 		commentary.addToTable(this.commentaryContent,this.line,this.hour,this.minute,this.second,this.file);

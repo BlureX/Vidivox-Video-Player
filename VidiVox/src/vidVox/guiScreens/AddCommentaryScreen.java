@@ -90,7 +90,7 @@ public class AddCommentaryScreen extends JFrame{
 		
 		//Code which I have referenced to hide the table
 		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
-		//table.removeColumn(table.getColumnModel().getColumn(3));
+		table.removeColumn(table.getColumnModel().getColumn(3));
 		
 		
 		JScrollPane scrollPane = new JScrollPane(); 
