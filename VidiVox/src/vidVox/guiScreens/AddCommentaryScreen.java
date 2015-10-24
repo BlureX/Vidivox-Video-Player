@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,11 @@ import vidVox.workers.OverlayMp3OntoVideo;
 import vidVox.workers.PreviewMP3;
 import vidVox.workers.TextToFile;
 
+/**
+ * @author jxu811
+ * This class corresponds to the Add Commentary frame which is initiated when the user clicks the
+ * Add Commentary button in the main player.
+ */
 public class AddCommentaryScreen extends JFrame{
 	AddCommentaryScreen addCommentary= this;
 	public static JFileChooser ourFileSelector= new JFileChooser();
@@ -47,13 +54,30 @@ public class AddCommentaryScreen extends JFrame{
 	List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
 
 
+	/**
+	 * @param screen
+	 * Constructor for my AddCommentary class
+	 */
 	public AddCommentaryScreen (MainPlayerScreen screen){
+
+
+
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				for (PreviewMP3 festival: voiceList){
+					festival.destroyProcess();
+					//voiceList.remove(festival);
+				}
+				voiceList=new ArrayList<PreviewMP3>();	
+			}
+		});
+
 
 		//making the main initial layout for the AddCommentaryScreen
 		//setBounds(450, 450, 850, 100);
 		//Create gridbag constrant variable.
 		GridBagConstraints c = new GridBagConstraints();
-		setTitle("Choose a mp3 file to overlay onto the current video");
+		setTitle("Add Commentary");
 		createCommentaryScreen = new TextToMp3Screen(screen);
 		createCommentaryScreen.setBounds(385, 475, 650, 100);
 		createCommentaryScreen.setMinimumSize(new Dimension(650, 100));
@@ -87,12 +111,12 @@ public class AddCommentaryScreen extends JFrame{
 		table = new JTable(commentaryTable);
 		table.setModel(commentaryTable);
 		table.setMinimumSize(new Dimension(550,900));
-		
+
 		//Code which I have referenced to hide the table
 		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
 		table.removeColumn(table.getColumnModel().getColumn(3));
-		
-		
+
+
 		JScrollPane scrollPane = new JScrollPane(); 
 		// scrollPane.setBounds(20, 75, 400, 400);
 		scrollPane.setViewportView(table);
@@ -108,19 +132,20 @@ public class AddCommentaryScreen extends JFrame{
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 3;
-		c.gridwidth = 5;
+		c.gridwidth = 6;
 		c.weighty = 99;
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(10,10,10,10);
 		pane.add(scrollPane, c);
 
 		//creating a Jbutton which will add commentary to the start of the video
-		JButton selectMp3 = new JButton("Add Mp3 Commentary..");
+		JButton selectMp3 = new JButton("Add mp3 Commentary");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 1;
+		c.insets = new Insets(0,10,0,0);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(selectMp3, c);
 
@@ -129,7 +154,7 @@ public class AddCommentaryScreen extends JFrame{
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.gridy = 1;
-		c.gridwidth = 3;
+		c.gridwidth =1;
 		c.weightx = 3;
 		c.weighty = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -143,7 +168,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.insets = new Insets(0,5,0,10);
+		c.insets = new Insets(0,10,0,0);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
 
@@ -156,15 +181,15 @@ public class AddCommentaryScreen extends JFrame{
 		c.weighty = 0;
 		c.gridwidth = 2;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(0,3,0,3);
+		c.insets = new Insets(0,0,0,0);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.add(textfield, c);
 
 		//This is labels to indicate what each spinner model corresponds to.
-		JLabel label1 = new JLabel("Hours/Minutes/Seconds");
+		JLabel label1 = new JLabel("HH:MM:SS");
 		c = new GridBagConstraints();
-		c.gridx = 3;
-		c.gridy = 2;
+		c.gridx = 4;
+		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 0;
 		c.gridwidth = 0;
@@ -173,16 +198,16 @@ public class AddCommentaryScreen extends JFrame{
 		pane.add(label1, c);
 
 		//This is the hour spinner model which will correspond to the hour you want to add the commentary at.
-		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,113,1);
+		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,99,1);
 		hourSpinner = new JSpinner(hourSpinnerModel);
 		c = new GridBagConstraints();
-		c.gridx = 4;
+		c.gridx = 3;
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.gridwidth = 1;
-		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(0,3,0,3);
+		//c.gridwidth = 1;
+		c.anchor = GridBagConstraints.EAST;
+		//c.insets = new Insets(0,3,0,3);
 		pane.add(hourSpinner, c);
 
 		//This is the minute spinner model which will correspond to the minute you want to add the commentary at.
@@ -193,8 +218,9 @@ public class AddCommentaryScreen extends JFrame{
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.gridwidth = 1;
-		c.insets = new Insets(0,3,0,3);
+		//c.gridwidth = 1;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(0,2,0,0);
 		pane.add(minuteSpinner, c);
 
 		//This is the second spinner model which will correspond to the second you want to add the commentary at.
@@ -205,9 +231,9 @@ public class AddCommentaryScreen extends JFrame{
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.gridwidth = 1;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(0,3,0,3);
+		//c.gridwidth = 1;
+		//c.anchor = GridBagConstraints.WEST;
+		//c.insets = new Insets(0,0,0,0);
 		pane.add(secondSpinner, c);
 
 		//Empty JLabel to organise the gridbag layout more nicely.
@@ -228,8 +254,8 @@ public class AddCommentaryScreen extends JFrame{
 		c.weighty = 1;
 		pane.add(two, c);
 
-		//Create video button which will allow you to create the video with all the commentary.
-		JButton createVideo = new JButton("Create Video");
+		//Preview video button which will allow you to preview the video with all the commentary.
+		JButton createVideo = new JButton("Preview");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 3;
@@ -237,6 +263,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.weightx = 1;
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(0,0,0,10);
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(createVideo, c);
 
@@ -249,7 +276,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.weightx = 1;
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(3,3,3,3);
+		c.insets = new Insets(3,10,3,10);
 		pane.add(preview, c);
 
 		//Button which will allow you to save your created commentary to a location.
@@ -261,7 +288,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.weightx = 1;
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.CENTER;
-		c.insets = new Insets(3,3,3,3);
+		c.insets = new Insets(3,5,3,0);
 		pane.add(saveButton, c);
 
 
@@ -295,11 +322,11 @@ public class AddCommentaryScreen extends JFrame{
 						}
 						GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName());
 						duration.execute();
-						
+
 					}else {
 						JOptionPane.showMessageDialog(null, "Error please select an appropriate file");
 					}
-				//Do nothing if the cancel option is selected.
+					//Do nothing if the cancel option is selected.
 				}else if (status == JFileChooser.CANCEL_OPTION){
 
 				}
@@ -326,17 +353,29 @@ public class AddCommentaryScreen extends JFrame{
 					second="0"+secondSpinner.getValue().toString();
 				}
 				//Starts creating the mp3 file and place it in the tmp folder.
-				TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
-				tmpFile.execute();
+				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
+					TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
+					tmpFile.execute();
+				} else {
+					JOptionPane.showMessageDialog(null, "Error, please enter appropriate commentary");
+				}
 			}
 		});
 		//This will delete the selected commentary rows.
 		deleteRow.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
 				int rowsSelected = table.getSelectedRows().length;
 				for(int i=0; i<rowsSelected ; i++ ) {
+					//Cancels any playing commentary from the selected rows
+					for (PreviewMP3 currentCommentary : voiceList){
+						if (commentaryTable.getValueAt(table.getSelectedRow(), 3).equals(currentCommentary.getFile())){
+							currentCommentary.destroyProcess();
+							voiceList.remove(currentCommentary);
+							break;
+						}
+					}
 					commentaryTable.removeRow(table.getSelectedRow());
 				}
 			}
@@ -434,8 +473,17 @@ public class AddCommentaryScreen extends JFrame{
 			}
 		});
 	}
-	
-	//This will add the content, duration, time of video and path of commentary into the table.
+
+
+	/**
+	 * @param content
+	 * @param duration
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param path
+	 * This will add the content, duration, time of video and path of commentary into the table.
+	 */
 	public void addToTable(String content, String duration, String hour, String minute, String second, String path){
 		Object[] data = { content , duration, hour+":"+minute+":"+second,path };
 		commentaryTable.addRow(data);

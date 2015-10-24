@@ -11,6 +11,10 @@ import javax.swing.JSlider;
 
 
 
+/**
+ * @author jxu811
+ * This is a class which establishes a loading bar.
+ */
 public class LoadingScreen extends JFrame{
 	//
 	private JPanel pane;

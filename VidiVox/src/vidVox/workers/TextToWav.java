@@ -6,10 +6,13 @@ import javax.swing.SwingWorker;
 
 import vidVox.guiScreens.AddCommentaryScreen;
 
+/**
+ * @author jxu811
+ * This class converts the text file into a wav file
+ */
 public class TextToWav extends SwingWorker<Void, String>{
 	
-	//location = location of where the mp3 will be saved
-	//filename = what the file is called
+	//This is the fields which will be used in the class
 	private String location;
 	private String filename;
 	private AddCommentaryScreen commentary;
@@ -34,7 +37,17 @@ public class TextToWav extends SwingWorker<Void, String>{
 		return null;
 	}
 
-	//text is the text that needs to be spoken
+	
+	/**
+	 * @param location
+	 * @param filename
+	 * @param commentary
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param commentaryContent
+	 * Constructor for my class
+	 */
 	public TextToWav (String location, String filename, AddCommentaryScreen commentary,String hour, String minute,String second,String  commentaryContent){
 		this.location = location;
 		this.filename = filename;

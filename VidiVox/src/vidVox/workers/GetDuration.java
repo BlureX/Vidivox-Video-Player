@@ -9,7 +9,12 @@ import javax.swing.SwingWorker;
 
 import vidVox.guiScreens.AddCommentaryScreen;
 
+/**
+ * @author jxu811
+ * This class will allow me to calculate the duration of a commentary or mp3 file.
+ */
 public class GetDuration extends SwingWorker<Void,String>{
+	//Fields that are used in this class
 	private String file;
 	public String duration;
 	private String line,hour,minute,second;;
@@ -39,7 +44,16 @@ public class GetDuration extends SwingWorker<Void,String>{
 		}
 		return null;
 	}
-	//Constructor for GetDuration
+	
+	/**
+	 * @param file
+	 * @param commentary
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param commentaryContent
+	 * Constructor for GetDuration
+	 */
 	public GetDuration(String file,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
 		this.file = file;
 		this.commentary=commentary;

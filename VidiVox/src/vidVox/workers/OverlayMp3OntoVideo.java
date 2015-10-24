@@ -7,10 +7,13 @@ import javax.swing.SwingWorker;
 import vidVox.guiScreens.MainPlayerScreen;
 import vidVox.guiScreens.TextToMp3Screen;
 
+/**
+ * @author jxu811
+ * This allows me to place audio over a video.
+ */
 public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 	//Fields used for my class.
 	private String command;
-	private String originalVideo = MainPlayerScreen.mediapath;
 	private String filename;
 	private Boolean overlay;
 
@@ -24,7 +27,6 @@ public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 		command = command + "\"/tmp/V"+filename+TextToMp3Screen.videoNumber+".mp4"+"\"";
 		
 		String cmd = command;
-		 System.out.println(cmd);
 		ProcessBuilder x = new ProcessBuilder("/bin/bash", "-c", cmd );
 
 		try {

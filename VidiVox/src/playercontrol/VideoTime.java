@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 
 import vidVox.guiScreens.MainPlayerScreen;
 
+/**
+ * @author jxu811
+ * This class corresponds to the Video time and labels which are associated with
+ * the Vidivox player.
+ */
 public class VideoTime {
 
 	JLabel timeLabel,endLabel;
@@ -16,10 +21,19 @@ public class VideoTime {
 	public long totaltime;
 	MainPlayerScreen mainPlayer;
 	
+	/**
+	 * @param mainPlayer
+	 * Constructor for my Vidivox player
+	 */
 	public VideoTime(MainPlayerScreen mainPlayer){
 		this.mainPlayer=mainPlayer;
 	}
 	
+	/**
+	 * @param topPane
+	 * This will set up the labels at the start and end of the position slider and
+	 * takes in a JPanel which will add these labels.
+	 */
 	public void setUpTime(JPanel topPane){
 
 		//Adding a Jlabel which will be the starting time of the video
@@ -48,13 +62,23 @@ public class VideoTime {
 
 	}
 	
-	//This function will update the time based on where it is in the video.
+	
+	/**
+	 * @param millis
+	 * This method takes in the time and converts it to the appropriate time format.
+	 * The time label is also set based on the time inputted.
+	 */
 	public void updateTime(long millis) {
 		String s = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 		timeLabel.setText(s);
 	}
 	
-	//This will get the total length of the video.
+	
+	/**
+	 * @param millis
+	 * This method will take in the total length of the video and then set the label
+	 * to its appropriate time.
+	 */
 	public void updateDuration(long millis) {
 		String s = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 		endLabel.setText(s);

@@ -21,6 +21,11 @@ import vidVox.workers.PreviewMP3;
 import vidVox.workers.TextToFile;
 
 
+/**
+ * @author jxu811
+ * This is a class used to hold the original video and display Mp3 screen.
+ *
+ */
 public class TextToMp3Screen extends JFrame {
 	//
 	private JPanel pane;

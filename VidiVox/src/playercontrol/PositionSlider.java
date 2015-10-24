@@ -13,7 +13,14 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import vidVox.guiScreens.MainPlayerScreen;
 
+/**
+ * This class will help set up the position slider and all its functionality 
+ * in the Vidivox video commentator.
+ * @author jxu811
+ * 
+ */
 public class PositionSlider {
+	//Initialise my variables that I will be using.
 	private JSlider positionSlider;
 	private GridBagConstraints  constraint;
 	MainPlayerScreen mainPlayer;
@@ -26,6 +33,10 @@ public class PositionSlider {
 
 	}
 
+	/**
+	 * @param topPane JPanel which will be used to add the slider
+	 * This method will set up the position slider with its appropriate layout and position.
+	 */
 	public void setUpPositionSlider(JPanel topPane){
 		//Adding the position Slider which will change as the video progresses
 		setPositionSlider(new JSlider());
@@ -45,7 +56,10 @@ public class PositionSlider {
 
 	}
 
-	//This class will set the video based on the position of the slider.
+	
+	/**
+	 * This method will set the video based on the position of the slider.
+	 */
 	void setSliderBasedPosition() {
 		//Check if it is playable.
 		if(!mainPlayer.mediaPlayerComponent.getMediaPlayer().isSeekable()) {
@@ -61,11 +75,19 @@ public class PositionSlider {
 		mainPlayer.mediaPlayerComponent.getMediaPlayer().setPosition(positionValue);
 	}
 
-	//Updates the position of the position slider based on value given.
+
+	/**
+	 * @param value Sets the position of the slider based on the value.
+	 * Updates the position of the position slider based on value given.
+	 */
 	public void updatePosition(int value) {
 		getPositionSlider().setValue(value);
 	}
 
+	/**
+	 * This will set up the action listeners for the position slider so that it can be clicked on
+	 * and events such as updating the video will occur when position slider is dragged.
+	 */
 	public void setUpListeners(){
 		//This is a change listener used to look at the changes when the video is being played and mainly used to
 		//update the the time of the video when the position slider is being dragged.
@@ -93,6 +115,7 @@ public class PositionSlider {
 				}
 				//This will allow you to go to a certain point in the video by clicking on the position slider and then updates
 				//the video based on where you clicked.
+				//Code was referenced from http://www.java-forums.org/awt-swing/84832-move-jslider-per-click.html
 				JSlider sourceSlider=(JSlider)e.getSource();
 				BasicSliderUI ui = (BasicSliderUI)sourceSlider.getUI();
 				int value = ui.valueForXPosition( e.getX() );
@@ -110,6 +133,7 @@ public class PositionSlider {
 		});
 	}
 
+	//Getters and setters for my position slider.
 	public JSlider getPositionSlider() {
 		return positionSlider;
 	}

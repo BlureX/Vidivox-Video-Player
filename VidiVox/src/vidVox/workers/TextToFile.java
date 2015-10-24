@@ -6,10 +6,12 @@ import javax.swing.SwingWorker;
 
 import vidVox.guiScreens.AddCommentaryScreen;
 
+/**
+ * @author jxu811
+ * This class will be used to create a file from the text which is inputted in the commentary box.
+ */
 public class TextToFile extends SwingWorker<Void, String>{
-	//
-	//text = text that needs to be spoken in the mp3
-	//location = location of where the mp3 will be saved
+	//This is fields which will be used in my class.
 	private String text;
 	private String filename;
 	private String location;
@@ -17,6 +19,7 @@ public class TextToFile extends SwingWorker<Void, String>{
 	private AddCommentaryScreen commentary;
 	private String commentaryContent;
 	String hour,minute,second;
+	
 	@Override
 	protected Void doInBackground() throws Exception {
 		commentaryContent = text;
@@ -36,7 +39,16 @@ public class TextToFile extends SwingWorker<Void, String>{
 		return null;
 	}
 
-	//text is the text which needs to be spoken
+
+	/**
+	 * @param text
+	 * @param location
+	 * @param commentary
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * This is the constructor used for this class
+	 */
 	public TextToFile (String text, String location, AddCommentaryScreen commentary,String hour, String minute,String second){
 		this.text = text;
 		this.location = location;
@@ -46,7 +58,7 @@ public class TextToFile extends SwingWorker<Void, String>{
 		this.second=second;
 	}
 	
-	//This is the done method which will turn my text to a wave file.
+	//This is the done method which will turn my text to a wav file.
 	protected void done(){
 		TextToWav k = new TextToWav(this.location, this.filename, this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
 		k.execute();

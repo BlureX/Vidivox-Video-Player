@@ -7,13 +7,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import vidVox.guiScreens.TextToMp3Screen;
 
+/**
+ * @author jxu811
+ * This class is used to open a video file.
+ */
 public class OpenVideo {
 	//This will choose my file and also a variable for my media path.
-	public static JFileChooser ourFileSelector= new JFileChooser();
-	public static String mediaPath="";
-	public static String videoName="";
+	public JFileChooser ourFileSelector= new JFileChooser();
+	private String mediaPath="";
+	private String videoName="";
 
-	public static boolean grabFile() {
+	/**
+	 * @return
+	 * This will return a boolean to show that the file the user wanted to grab is successful.
+	 */
+	public boolean grabFile() {
 		
 		//File we want to choose.
 		File ourFile;
@@ -28,9 +36,9 @@ public class OpenVideo {
 			//Get selected file.
 			ourFile=ourFileSelector.getSelectedFile();
 			if (ourFile.exists()){
-				mediaPath=ourFile.getAbsolutePath();
-				videoName=ourFile.getName();
-				TextToMp3Screen.originalVideo = mediaPath;
+				setMediaPath(ourFile.getAbsolutePath());
+				setVideoName(ourFile.getName());
+				TextToMp3Screen.originalVideo = getMediaPath();
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid File");
@@ -42,5 +50,37 @@ public class OpenVideo {
 			return false;
 		}
 
+	}
+
+	/**
+	 * @return
+	 * Returns the media path
+	 */
+	public String getMediaPath() {
+		return mediaPath;
+	}
+
+	/**
+	 * @param mediaPath
+	 * Sets the media path
+	 */
+	public void setMediaPath(String mediaPath) {
+		this.mediaPath = mediaPath;
+	}
+
+	/**
+	 * @return
+	 * Returns video name
+	 */
+	public String getVideoName() {
+		return videoName;
+	}
+
+	/**
+	 * @param videoName
+	 * Sets video name
+	 */
+	public void setVideoName(String videoName) {
+		this.videoName = videoName;
 	}
 }

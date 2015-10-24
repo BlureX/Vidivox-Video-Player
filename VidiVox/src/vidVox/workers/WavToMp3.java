@@ -6,10 +6,12 @@ import javax.swing.SwingWorker;
 
 import vidVox.guiScreens.AddCommentaryScreen;
 
+/**
+ * @author jxu811
+ * This class will convert the Wav file to mp3.
+ */
 public class WavToMp3 extends SwingWorker<Void, String>{
-	//
-	//location = location of where the mp3 will be saved
-	//filename = what the file is called
+	//Fields which I used in my class.
 	private String location;
 	private String filename;
 	private AddCommentaryScreen commentary;
@@ -19,7 +21,7 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 	protected Void doInBackground() throws Exception {
 
 		//creating the bash process which will change a wav file into a mp3 file and store it in
-		//the home directory
+		//the directory stated by location.
 
 		if (!(location.endsWith(".mp3"))){
 			location = location+".mp3";
@@ -39,6 +41,16 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 		return null;
 	}
 
+	/**
+	 * @param location
+	 * @param filename
+	 * @param commentary
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param commentaryContent
+	 * Constructor for WavToMp3
+	 */
 	public WavToMp3 (String location, String filename,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
 		this.location = location;
 		this.filename = filename;
@@ -49,6 +61,7 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 		this.commentaryContent= commentaryContent;
 	}
 
+	//Gets the duration of the Mp3 after it is created.
 	protected void done(){
 		GetDuration duration = new GetDuration(this.location,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
 		duration.execute();

@@ -10,36 +10,43 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import vidVox.guiScreens.MainPlayerScreen;
 import vidVox.guiScreens.SaveDialogScreen;
 
+/**
+ * @author jxu811
+ * This class will be used to save the current video as a new video.
+ */
 public class SaveVideoAs {
 
+	/**
+	 * Method which allows you to save video as.
+	 */
 	public void saveVideoAs(){
-		//
-		//applying a mp4 filter
+		
+		//Declare my variables
 		String mediaPath1;
 		File ourFile1;
 
-		//opening the save file explorer, user gets to choose where to save the file   
+		//Opens the file chooser and if there is no video playing, return an error.
 		if (MainPlayerScreen.mediapath == null){
 			JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 		}else{
-			//adding a file filter for saving as mp4 and avi
-			System.out.println("GG");
+			//Applys a file filter so that you can only see mp4 and avi files
 			FileFilter filter = new FileNameExtensionFilter("MP4 & AVI","mp4","avi");
 			SaveDialogScreen.ourFileSelector.resetChoosableFileFilters();
 			SaveDialogScreen.ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			SaveDialogScreen.ourFileSelector.setSelectedFile(new File(OpenVideo.ourFileSelector.getSelectedFile().getName()));	
+			SaveDialogScreen.ourFileSelector.setSelectedFile(new File(""));	
 			SaveDialogScreen.ourFileSelector.setFileFilter(filter);
-			SaveDialogScreen.ourFileSelector.showSaveDialog(null);    
-			if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
-				ourFile1=SaveDialogScreen.ourFileSelector.getSelectedFile();
-				mediaPath1=ourFile1.getAbsolutePath();
-				System.out.println(mediaPath1);
-				if ((!(mediaPath1.endsWith(".mp4"))) && (!(mediaPath1.endsWith(".avi")))) {
-					mediaPath1 = mediaPath1+".avi";
+			int status = SaveDialogScreen.ourFileSelector.showSaveDialog(null); 
+			//Checks if user selected to save
+			if (status == JFileChooser.APPROVE_OPTION){
+				if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
+					ourFile1=SaveDialogScreen.ourFileSelector.getSelectedFile();
+					mediaPath1=ourFile1.getAbsolutePath();
+					if ((!(mediaPath1.endsWith(".mp4"))) && (!(mediaPath1.endsWith(".avi")))) {
+						mediaPath1 = mediaPath1+".avi";
+					}
+					MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1);
+					k.execute();
 				}
-				MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1);
-				System.out.println("GGSONNY");
-				k.execute();
 			}
 		}
 	}

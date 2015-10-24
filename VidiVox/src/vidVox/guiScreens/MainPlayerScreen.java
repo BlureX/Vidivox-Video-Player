@@ -65,30 +65,35 @@ public class MainPlayerScreen extends JFrame {
 	//Menu at the top which allows users to select their appropriate options.
 	VideoMenu videoMenu;
 
-	/**
-	 * Main Method used to start my application.
-	 * Also used some code from https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
-	 * additional features.
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		//Initialising all the screens which will be used in the video player.
-		MainPlayerScreen frame = new MainPlayerScreen();
-		frame.setBounds(300, 200, 820, 650);
-		frame.setMinimumSize(new Dimension(820, 1));
-		frame.setVisible(true);
-
-		loadingScreen.setBounds(510, 495, 400, 60);
-		loadingScreen.setMinimumSize(new Dimension(400, 60));
-		addCommentaryScreen = new AddCommentaryScreen(frame);
-		addCommentaryScreen.setBounds(285, 475, 850, 500);
-		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
-	}
+//	/**
+//	 * Main Method used to start my application.
+//	 * Also used code from https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
+//	 * additional features such as progress bar.
+//	 * @param args
+//	 */
+//	public static void main(String[] args) {
+//		//Initialising all the screens which will be used in the video player.
+//		MainPlayerScreen frame = new MainPlayerScreen();
+//		frame.setBounds(300, 200, 820, 650);
+//		frame.setMinimumSize(new Dimension(820, 1));
+//		frame.setVisible(true);
+//
+//		loadingScreen.setBounds(510, 495, 400, 60);
+//		loadingScreen.setMinimumSize(new Dimension(400, 60));
+//		addCommentaryScreen = new AddCommentaryScreen(frame);
+//		addCommentaryScreen.setBounds(285, 475, 850, 500);
+//		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
+//	}
 
 	/**
 	 * Constructor for my class.
 	 */
 	public MainPlayerScreen() {
+		loadingScreen.setBounds(510, 495, 400, 60);
+		loadingScreen.setMinimumSize(new Dimension(400, 60));
+		addCommentaryScreen = new AddCommentaryScreen(mainplayer);
+		addCommentaryScreen.setBounds(285, 475, 850, 500);
+		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				if (!(mediapath == TextToMp3Screen.originalVideo)){
@@ -128,7 +133,10 @@ public class MainPlayerScreen extends JFrame {
 		setUpListeners();
 	}
 
-	//This will run the video from the media path provided.
+	
+	/**
+	 * This will run the video from the media path provided.
+	 */
 	public void run() {
 		//This will run the video.
 		mediaPlayerComponent.getMediaPlayer().playMedia(mediapath);
@@ -156,7 +164,10 @@ public class MainPlayerScreen extends JFrame {
 
 
 
-	//Update the UI as it plays.
+	
+	/**
+	 * Update the GUI as it plays.
+	 */
 	public void updateGUI() {
 		if(!mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 			if(!pressedWhilePlaying) {
@@ -181,7 +192,11 @@ public class MainPlayerScreen extends JFrame {
 
 
 
-	//Class which is used to update the GUI.
+	
+	/**
+	 * @author jxu811
+	 * Class which is used to update the GUI.
+	 */
 	private final class UpdateRunnable implements Runnable {
 
 		private final EmbeddedMediaPlayerComponent mediaPlayerComponent;
@@ -209,6 +224,10 @@ public class MainPlayerScreen extends JFrame {
 		}
 	}
 
+	/**
+	 * This will set out the layout of my panes and vidVox player with their
+	 * buttons associated with it.
+	 */
 	private void setUpLayout(){
 		//creating the content pane which will store all of the video components
 		setTitle("");
@@ -236,13 +255,11 @@ public class MainPlayerScreen extends JFrame {
 		JMenuBar menuBar = videoMenu.setUpMenuBar();
 		setJMenuBar(menuBar);
 
-
 		//Adding in the video area where a mp4 can be played
 		mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 		mediaPlayerComponent.setPreferredSize(new Dimension(600,480));
 		ff=false;
 		rw=false;
-
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -308,7 +325,9 @@ public class MainPlayerScreen extends JFrame {
 		
 		
 	}
-	//This will check if rewind and fastforward and currently on and turn them off.
+	/**
+	 * This will check if rewind and fastforward are currently on and turn them off.
+	 */
 	public void turnOffRewindAndFastforward(){
 		if (ff==true){
 			ffswing.cancel(true);
@@ -319,6 +338,12 @@ public class MainPlayerScreen extends JFrame {
 		ff=false;
 		rw=false;
 	}
+	
+	
+	
+	/**
+	 * Set up listeners for my buttons in my GUI
+	 */
 	public void setUpListeners(){
 		//Sets up action listener for volume slider and mute button.
 		volumeFunctionality.setUpListener();

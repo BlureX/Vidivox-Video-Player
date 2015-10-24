@@ -3,6 +3,10 @@ package vidVox.guiScreens;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+/**
+ * @author jxu811
+ * This class will be displayed when you want to save a file.
+ */
 public class SaveDialogScreen {
 	//
 	//a file chooser that will ask the user before it overwrites the file
