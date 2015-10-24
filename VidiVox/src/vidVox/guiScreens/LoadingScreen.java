@@ -24,7 +24,7 @@ public class LoadingScreen extends JFrame{
 		//making the main initial layout for the loading screen
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(300, 300, 400, 100);
-		setTitle("Adding commentary please wait");
+		setTitle("Please wait for your task to be completed");
 		GridBagConstraints c = new GridBagConstraints();
 
 		//creating the content pane which will store all of the loading screen components

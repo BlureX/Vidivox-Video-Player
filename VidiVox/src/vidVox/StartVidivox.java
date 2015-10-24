@@ -7,7 +7,7 @@ import vidVox.guiScreens.LoadingScreen;
 import vidVox.guiScreens.MainPlayerScreen;
 
 public class StartVidivox {
-	
+
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
 	/**

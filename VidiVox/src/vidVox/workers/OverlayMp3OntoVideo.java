@@ -25,7 +25,7 @@ public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 		TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(true);
 		//String cmd = "ffmpeg -y -i "+"\""+originalVideo+"\""+" -i "+"\""+audio+"\""+" -filter_complex amix -strict -2 \"/tmp/V"+filename+TextToMp3Screen.videoNumber+".mp4"+"\"";
 		command = command + "\"/tmp/V"+filename+TextToMp3Screen.videoNumber+".mp4"+"\"";
-		
+
 		String cmd = command;
 		ProcessBuilder x = new ProcessBuilder("/bin/bash", "-c", cmd );
 

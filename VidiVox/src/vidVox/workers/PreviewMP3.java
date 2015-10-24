@@ -14,22 +14,22 @@ public class PreviewMP3 extends SwingWorker<Void, String>{
 	private String file;
 	public boolean speaking=true;
 	Process process;
-	
+
 	@Override
 	protected Void doInBackground() throws Exception {
 
 		//creating the bash process which will speak the user high score in festival
-		
+
 		String cmd="ffplay -nodisp -autoexit -af volume=1 \"" + file+ "\"";
 		ProcessBuilder x = new ProcessBuilder("/bin/bash", "-c", cmd );
 		Thread.sleep(100);
-		
+
 		try {
 			process = x.start();
 			process.waitFor();
 		} catch (IOException e) {
 			e.printStackTrace();
-		
+
 		}
 		return null;
 	}
@@ -41,8 +41,8 @@ public class PreviewMP3 extends SwingWorker<Void, String>{
 	public PreviewMP3(String file){
 		this.file = file;
 	}
-	
-	
+
+
 	public void destroyProcess(){
 		process.destroy();
 	}

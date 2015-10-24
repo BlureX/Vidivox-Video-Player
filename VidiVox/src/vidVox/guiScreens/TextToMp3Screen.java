@@ -18,7 +18,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import vidVox.workers.PreviewMP3;
-import vidVox.workers.TextToFile;
 
 
 /**
@@ -33,6 +32,7 @@ public class TextToMp3Screen extends JFrame {
 	public static int videoNumber =0;
 	public static String originalVideo;
 	public static MainPlayerScreen mainPlayerScreen;
+	
 
 
 	public TextToMp3Screen (MainPlayerScreen mainPlayerScreen) {
@@ -146,7 +146,7 @@ public class TextToMp3Screen extends JFrame {
 				}
 			}
 		});
-		
+
 		overlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

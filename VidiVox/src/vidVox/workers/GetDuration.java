@@ -40,11 +40,11 @@ public class GetDuration extends SwingWorker<Void,String>{
 			stdoutBuffered.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		
+
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param file
 	 * @param commentary

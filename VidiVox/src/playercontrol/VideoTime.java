@@ -20,7 +20,7 @@ public class VideoTime {
 	GridBagConstraints constraints;
 	public long totaltime;
 	MainPlayerScreen mainPlayer;
-	
+
 	/**
 	 * @param mainPlayer
 	 * Constructor for my Vidivox player
@@ -28,7 +28,7 @@ public class VideoTime {
 	public VideoTime(MainPlayerScreen mainPlayer){
 		this.mainPlayer=mainPlayer;
 	}
-	
+
 	/**
 	 * @param topPane
 	 * This will set up the labels at the start and end of the position slider and
@@ -61,8 +61,8 @@ public class VideoTime {
 		topPane.add(endLabel, constraints);
 
 	}
-	
-	
+
+
 	/**
 	 * @param millis
 	 * This method takes in the time and converts it to the appropriate time format.
@@ -72,8 +72,8 @@ public class VideoTime {
 		String s = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 		timeLabel.setText(s);
 	}
-	
-	
+
+
 	/**
 	 * @param millis
 	 * This method will take in the total length of the video and then set the label

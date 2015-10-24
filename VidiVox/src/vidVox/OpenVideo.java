@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import vidVox.guiScreens.MainPlayerScreen;
 import vidVox.guiScreens.TextToMp3Screen;
 
 /**
@@ -22,7 +23,7 @@ public class OpenVideo {
 	 * This will return a boolean to show that the file the user wanted to grab is successful.
 	 */
 	public boolean grabFile() {
-		
+
 		//File we want to choose.
 		File ourFile;
 
@@ -39,12 +40,13 @@ public class OpenVideo {
 				setMediaPath(ourFile.getAbsolutePath());
 				setVideoName(ourFile.getName());
 				TextToMp3Screen.originalVideo = getMediaPath();
+				MainPlayerScreen.saved=true;
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid File");
 				return false;
 			}
-			
+
 		} else {
 			//Returns false if they chose to cancel.
 			return false;

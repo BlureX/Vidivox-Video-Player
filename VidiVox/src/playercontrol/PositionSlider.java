@@ -56,7 +56,7 @@ public class PositionSlider {
 
 	}
 
-	
+
 	/**
 	 * This method will set the video based on the position of the slider.
 	 */

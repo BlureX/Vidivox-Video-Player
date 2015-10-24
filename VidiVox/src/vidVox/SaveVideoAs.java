@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import vidVox.guiScreens.MainPlayerScreen;
 import vidVox.guiScreens.SaveDialogScreen;
+import vidVox.guiScreens.TextToMp3Screen;
 
 /**
  * @author jxu811
@@ -20,7 +21,7 @@ public class SaveVideoAs {
 	 * Method which allows you to save video as.
 	 */
 	public void saveVideoAs(){
-		
+
 		//Declare my variables
 		String mediaPath1;
 		File ourFile1;
@@ -39,13 +40,17 @@ public class SaveVideoAs {
 			//Checks if user selected to save
 			if (status == JFileChooser.APPROVE_OPTION){
 				if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
+
 					ourFile1=SaveDialogScreen.ourFileSelector.getSelectedFile();
 					mediaPath1=ourFile1.getAbsolutePath();
 					if ((!(mediaPath1.endsWith(".mp4"))) && (!(mediaPath1.endsWith(".avi")))) {
 						mediaPath1 = mediaPath1+".avi";
 					}
-					MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1);
+					
+					MoveFile k = new MoveFile(MainPlayerScreen.mediapath, mediaPath1,false);
 					k.execute();
+					
+					
 				}
 			}
 		}

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -117,6 +118,7 @@ public class AddCommentaryScreen extends JFrame{
 		table.removeColumn(table.getColumnModel().getColumn(3));
 
 
+
 		JScrollPane scrollPane = new JScrollPane(); 
 		// scrollPane.setBounds(20, 75, 400, 400);
 		scrollPane.setViewportView(table);
@@ -172,6 +174,20 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
 
+		
+//		String[] festivalVoice = { "Default", "Female", "Robo"};
+//		JComboBox voiceChanger = new JComboBox(festivalVoice);
+//		c = new GridBagConstraints();
+//		c.gridx = 0;
+//		c.gridy = 2;
+//		c.weightx = 1;
+//		c.weighty = 0;
+//		c.gridwidth =;
+//		c.anchor = GridBagConstraints.EAST;
+//		c.insets = new Insets(0,0,0,0);
+//		c.fill = GridBagConstraints.HORIZONTAL;
+//		pane.add(voiceChanger, c);
+		
 		//This is a textfield box which allow you to create commentary to add to the video.
 		textfield = new JTextField();
 		c = new GridBagConstraints();
@@ -255,7 +271,7 @@ public class AddCommentaryScreen extends JFrame{
 		pane.add(two, c);
 
 		//Preview video button which will allow you to preview the video with all the commentary.
-		JButton createVideo = new JButton("Preview");
+		JButton createVideo = new JButton("Preview Video");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 3;
@@ -403,6 +419,7 @@ public class AddCommentaryScreen extends JFrame{
 					OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true);
 					mergeVideo.execute();
 					setVisible(false);
+					MainPlayerScreen.saved=false;
 				}
 			}
 		});
@@ -463,7 +480,7 @@ public class AddCommentaryScreen extends JFrame{
 						int row = table.getSelectedRow();
 						String filename = commentaryTable.getValueAt(row, 3).toString();
 						//Uses move file to place the file into the stated path.
-						MoveFile k = new MoveFile(filename,mediaPath);
+						MoveFile k = new MoveFile(filename,mediaPath,true);
 						k.execute();
 					}else{
 						JOptionPane.showMessageDialog(null, "Error please save to an appropriate location");

@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import vidVox.MoveFile;
 import vidVox.OpenVideo;
-import vidVox.SaveVideoAs;
 import vidVox.guiScreens.MainPlayerScreen;
 import vidVox.guiScreens.TextToMp3Screen;
 
@@ -27,7 +26,7 @@ public class VideoMenu {
 	JMenuItem openVideo, saveVideo, saveVideoAs;
 	MainPlayerScreen mainPlayer;
 	OpenVideo openVideoOption=new OpenVideo();
-	
+
 	/**
 	 * @param mainPlayer
 	 * Constructor for my class
@@ -35,14 +34,14 @@ public class VideoMenu {
 	public VideoMenu(MainPlayerScreen mainPlayer){
 		this.mainPlayer=mainPlayer;
 	}
-	
+
 	/**
 	 * @return
 	 * This will set up my JmenuBar and add the approrpiate items to it
 	 * so that my Vidivox functions
 	 */
 	public JMenuBar setUpMenuBar(){
-		
+
 		//Creates a Menu bar for the frame
 		menuBar = new JMenuBar();
 		GridBagConstraints c = new GridBagConstraints();
@@ -65,61 +64,63 @@ public class VideoMenu {
 		return menuBar;	
 	}
 
-	
-	
 
-	
+
+
+
 	/**
 	 * This will set up my Action listeners for my items which are located in the menu
 	 */
 	public void setUpMenuListeners(){
-	//Allows the user to save video.
-	saveVideo.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (MainPlayerScreen.mediapath == null){
-				JOptionPane.showMessageDialog(null, "Error, please open a video before trying to save.");
-			}else{
-				MoveFile k = new MoveFile(mainPlayer.mediapath, TextToMp3Screen.originalVideo);
-				k.execute();
+		//Allows the user to save video.
+		saveVideo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (MainPlayerScreen.mediapath == null){
+					JOptionPane.showMessageDialog(null, "Error, please open a video before trying to save.");
+				}else{
+					MoveFile k = new MoveFile(mainPlayer.mediapath, TextToMp3Screen.originalVideo,false);
+					k.execute();
+					MainPlayerScreen.saved=true;
+				}
 			}
-		}
-	});
-	//Allows the user to save Video as.
-	saveVideoAs.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//Pauses the current video being played if any.
-			mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
-			//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
-			mainPlayer.saveVideo.saveVideoAs();
-			if (mainPlayer.play.getText().equals("pause")){
-				//If user decided to cancel the operation, it will continue playing the video if it is being played.
-				mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
+		});
+		//Allows the user to save Video as.
+		saveVideoAs.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Pauses the current video being played if any.
+				mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
+				//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
+				mainPlayer.saveVideo.saveVideoAs();
+				if (mainPlayer.play.getText().equals("pause")){
+					//If user decided to cancel the operation, it will continue playing the video if it is being played.
+					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
+				}
+				MainPlayerScreen.saved=true;
 			}
-		}
-	});
-	//This will allow you to choose a file and play it.
-	openVideo.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//Pauses the current video being played if any.
-			mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
-			//Check if the user grabbed a file.
-			boolean openfile=openVideoOption.grabFile();
-			if (openfile){
-				mainPlayer.mediapath=openVideoOption.getMediaPath();
-				mainPlayer.turnOffRewindAndFastforward();
-				mainPlayer.play.setText("pause");
-				mainPlayer.run();
-				mainPlayer.setTitle(openVideoOption.getVideoName());
+		});
+		//This will allow you to choose a file and play it.
+		openVideo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Pauses the current video being played if any.
+				mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
+				//Check if the user grabbed a file.
+				boolean openfile=openVideoOption.grabFile();
+				if (openfile){
+					mainPlayer.mediapath=openVideoOption.getMediaPath();
+					mainPlayer.turnOffRewindAndFastforward();
+					mainPlayer.play.setText("pause");
+					mainPlayer.run();
+					mainPlayer.setTitle(openVideoOption.getVideoName());
+				}
+				if (mainPlayer.play.getText().equals("pause")){
+					//If user decided to cancel the operation, it will continue playing the video if it is being played.
+					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
+				}
 			}
-			if (mainPlayer.play.getText().equals("pause")){
-				//If user decided to cancel the operation, it will continue playing the video if it is being played.
-				mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
-			}
-		}
-	});
+		});
 	}
-	
+
 }

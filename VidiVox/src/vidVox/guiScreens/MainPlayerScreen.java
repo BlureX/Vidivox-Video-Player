@@ -44,8 +44,8 @@ public class MainPlayerScreen extends JFrame {
 	public static String mediapath;
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
-	private boolean pressedWhilePlaying = false;
-	private boolean ff=false, rw=false;
+	private boolean ff=false, rw=false,pressedWhilePlaying = false;
+	public static boolean saved=true;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	VolumeControl volumeFunctionality;
 	public PositionSlider progressSlider;
@@ -54,7 +54,7 @@ public class MainPlayerScreen extends JFrame {
 	GridBagLayout gbl_topPane;
 	GridBagLayout gbl_bottomPane;
 	GridBagConstraints c;
-	
+
 	//Buttons, sliders and labels which are used in my GUI for users to click.
 	JButton fastforward, rewind;
 	public JButton play;
@@ -65,25 +65,25 @@ public class MainPlayerScreen extends JFrame {
 	//Menu at the top which allows users to select their appropriate options.
 	VideoMenu videoMenu;
 
-//	/**
-//	 * Main Method used to start my application.
-//	 * Also used code from https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
-//	 * additional features such as progress bar.
-//	 * @param args
-//	 */
-//	public static void main(String[] args) {
-//		//Initialising all the screens which will be used in the video player.
-//		MainPlayerScreen frame = new MainPlayerScreen();
-//		frame.setBounds(300, 200, 820, 650);
-//		frame.setMinimumSize(new Dimension(820, 1));
-//		frame.setVisible(true);
-//
-//		loadingScreen.setBounds(510, 495, 400, 60);
-//		loadingScreen.setMinimumSize(new Dimension(400, 60));
-//		addCommentaryScreen = new AddCommentaryScreen(frame);
-//		addCommentaryScreen.setBounds(285, 475, 850, 500);
-//		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
-//	}
+	//	/**
+	//	 * Main Method used to start my application.
+	//	 * Also used code from https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
+	//	 * additional features such as progress bar.
+	//	 * @param args
+	//	 */
+	//	public static void main(String[] args) {
+	//		//Initialising all the screens which will be used in the video player.
+	//		MainPlayerScreen frame = new MainPlayerScreen();
+	//		frame.setBounds(300, 200, 820, 650);
+	//		frame.setMinimumSize(new Dimension(820, 1));
+	//		frame.setVisible(true);
+	//
+	//		loadingScreen.setBounds(510, 495, 400, 60);
+	//		loadingScreen.setMinimumSize(new Dimension(400, 60));
+	//		addCommentaryScreen = new AddCommentaryScreen(frame);
+	//		addCommentaryScreen.setBounds(285, 475, 850, 500);
+	//		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
+	//	}
 
 	/**
 	 * Constructor for my class.
@@ -96,7 +96,8 @@ public class MainPlayerScreen extends JFrame {
 		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				if (!(mediapath == TextToMp3Screen.originalVideo)){
+				//if (!(mediapath.equals(TextToMp3Screen.originalVideo))){
+				if (saved==false){
 					Object[] options = { "Save", "Save as.." , "Exit without saving" };
 					int choice = JOptionPane.showOptionDialog(null, 
 							"Save changes to your video before closing?", 
@@ -110,7 +111,7 @@ public class MainPlayerScreen extends JFrame {
 						if (MainPlayerScreen.mediapath == null){
 							JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 						} else { 
-							MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo);
+							MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo,false);
 							k.execute();
 						}
 					} else if (choice == 1) {
@@ -133,7 +134,7 @@ public class MainPlayerScreen extends JFrame {
 		setUpListeners();
 	}
 
-	
+
 	/**
 	 * This will run the video from the media path provided.
 	 */
@@ -162,9 +163,6 @@ public class MainPlayerScreen extends JFrame {
 		executorService.scheduleAtFixedRate(new UpdateRunnable(mediaPlayerComponent), 0, 100, TimeUnit.MILLISECONDS);
 	}
 
-
-
-	
 	/**
 	 * Update the GUI as it plays.
 	 */
@@ -182,7 +180,7 @@ public class MainPlayerScreen extends JFrame {
 			}
 		}
 		//Set the title of the video.
-		
+
 		//Gets the current time and position and updates them in the GUI.
 		long time = mediaPlayerComponent.getMediaPlayer().getTime();
 		int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
@@ -192,7 +190,7 @@ public class MainPlayerScreen extends JFrame {
 
 
 
-	
+
 	/**
 	 * @author jxu811
 	 * Class which is used to update the GUI.
@@ -322,8 +320,8 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,10,0,10);
 		c.anchor = GridBagConstraints.EAST;
 		bottomPane.add(addCommentaryButton, c);	 
-		
-		
+
+
 	}
 	/**
 	 * This will check if rewind and fastforward are currently on and turn them off.
@@ -338,9 +336,9 @@ public class MainPlayerScreen extends JFrame {
 		ff=false;
 		rw=false;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Set up listeners for my buttons in my GUI
 	 */
@@ -349,10 +347,10 @@ public class MainPlayerScreen extends JFrame {
 		volumeFunctionality.setUpListener();
 		//Sets up action listener for progress slider.
 		progressSlider.setUpListeners();
-		
+
 		//This will set up the video menu bar
 		videoMenu.setUpMenuListeners();
-		
+
 		//Adds an action listener when the play button is clicked.
 		play.addActionListener(new ActionListener() {
 			@Override
@@ -488,4 +486,6 @@ public class MainPlayerScreen extends JFrame {
 			}
 		});
 	}
+
+
 }

@@ -19,7 +19,7 @@ public class TextToFile extends SwingWorker<Void, String>{
 	private AddCommentaryScreen commentary;
 	private String commentaryContent;
 	String hour,minute,second;
-	
+
 	@Override
 	protected Void doInBackground() throws Exception {
 		commentaryContent = text;
@@ -57,7 +57,7 @@ public class TextToFile extends SwingWorker<Void, String>{
 		this.minute=minute;
 		this.second=second;
 	}
-	
+
 	//This is the done method which will turn my text to a wav file.
 	protected void done(){
 		TextToWav k = new TextToWav(this.location, this.filename, this.commentary,this.hour,this.minute,this.second,this.commentaryContent);

@@ -34,7 +34,6 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 			Process process = x.start();
 			process.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -65,7 +64,7 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 	protected void done(){
 		GetDuration duration = new GetDuration(this.location,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
 		duration.execute();
-		
+
 	}
 
 }
