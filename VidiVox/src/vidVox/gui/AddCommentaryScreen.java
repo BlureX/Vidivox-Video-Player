@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -29,11 +31,12 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import fileconverter.TextToFile;
+
 import vidVox.MoveFile;
 import vidVox.workers.GetDuration;
 import vidVox.workers.OverlayMp3OntoVideo;
 import vidVox.workers.PreviewMP3;
-import vidVox.workers.TextToFile;
 
 /**
  * @author jxu811
@@ -53,6 +56,7 @@ public class AddCommentaryScreen extends JFrame{
 	private final JTable table;
 	private List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
 	private MainPlayerScreen mainPlayer;
+	private boolean displayText=true;
 	/**
 	 * @param screen
 	 * Constructor for my AddCommentary class
@@ -129,14 +133,15 @@ public class AddCommentaryScreen extends JFrame{
 
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton selectMp3 = new JButton("Add mp3 Commentary");
-		selectMp3.setToolTipText("Adds a mp3 file to the table");
+		selectMp3.setToolTipText("Adds a mp3 file to commentary table and based on current time selected");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.insets = new Insets(0,10,0,0);
+		c.insets = new Insets(0,10,0,10);
 		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.add(selectMp3, c);
 
 		//creating a JButton which allows you to delete the selected commentary.
@@ -154,33 +159,24 @@ public class AddCommentaryScreen extends JFrame{
 
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton createCommentary = new JButton("Create Commentary");
-		createCommentary.setToolTipText("Creates commentary from the text in text box and duration specified");
+		createCommentary.setToolTipText("Creates commentary based on text and time specified");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
-		c.insets = new Insets(0,10,0,0);
+		c.insets = new Insets(0,10,0,10);
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
 
 
-		//		String[] festivalVoice = { "Default", "Female", "Robo"};
-		//		JComboBox voiceChanger = new JComboBox(festivalVoice);
-		//		c = new GridBagConstraints();
-		//		c.gridx = 0;
-		//		c.gridy = 2;
-		//		c.weightx = 1;
-		//		c.weighty = 0;
-		//		c.gridwidth =;
-		//		c.anchor = GridBagConstraints.EAST;
-		//		c.insets = new Insets(0,0,0,0);
-		//		c.fill = GridBagConstraints.HORIZONTAL;
-		//		pane.add(voiceChanger, c);
+
 
 		//This is a textfield box which allow you to create commentary to add to the video.
 		textfield = new JTextField();
 		textfield.setToolTipText("Place to add commentary");
+		textfield.setText("Add Commentary Here......[100 Character Limit]");
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 2;
@@ -201,9 +197,22 @@ public class AddCommentaryScreen extends JFrame{
 		c.weightx = 1;
 		c.weighty = 0;
 		c.gridwidth = 0;
-		c.insets = new Insets(0,1,0,1);
+		c.insets = new Insets(0,1,0,20);
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(label1, c);
+
+		//This is labels to indicate what each spinner model corresponds to.
+		JLabel label2 = new JLabel("Change Voice");
+		label1.setToolTipText("Choose a accent for the commentary");
+		c = new GridBagConstraints();
+		c.gridx = 4;
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.gridwidth = 0;
+		c.insets = new Insets(0,1,0,10);
+		c.anchor = GridBagConstraints.EAST;
+		pane.add(label2, c);
 
 		//This is the hour spinner model which will correspond to the hour you want to add the commentary at.
 		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,99,1);
@@ -277,11 +286,12 @@ public class AddCommentaryScreen extends JFrame{
 		//c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(0,0,0,10);
 		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(createVideo, c);
 
 		//Button which will allow you to preview the commentary that is to be added.
-		JButton preview = new JButton("Preview");
+		JButton preview = new JButton("Listen");
 		preview.setToolTipText("Previews a selected commentary");
 		c = new GridBagConstraints();
 		c.gridx = 0;
@@ -290,6 +300,7 @@ public class AddCommentaryScreen extends JFrame{
 		c.weightx = 1;
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(3,10,3,10);
 		pane.add(preview, c);
 
@@ -297,14 +308,28 @@ public class AddCommentaryScreen extends JFrame{
 		JButton saveButton = new JButton("Save");
 		saveButton.setToolTipText("Saves Selected Commentary");
 		c = new GridBagConstraints();
-		c.gridx = 0;
+		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 1;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.anchor = GridBagConstraints.EAST;
-		c.insets = new Insets(3,0,3,40);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.WEST;
+		//c.insets = new Insets(3,90,3,50);
 		pane.add(saveButton, c);
+
+		String[] festivalVoice = { "Default", "Female", "Robo"};
+		JComboBox voiceChanger = new JComboBox(festivalVoice);
+		c = new GridBagConstraints();
+		c.gridx = 4;
+		c.gridy = 2;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.gridwidth =1;
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(0,0,0,10);
+		//c.fill = GridBagConstraints.HORIZONTAL;
+		pane.add(voiceChanger, c);
 
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
@@ -320,15 +345,23 @@ public class AddCommentaryScreen extends JFrame{
 				if (status == JFileChooser.APPROVE_OPTION){
 					if (!(ourFileSelector.getSelectedFile() == null)){
 						ourFile=ourFileSelector.getSelectedFile();
-						mediaPath=ourFile.getAbsolutePath();
-						String hour=checkZero(hourSpinner.getValue().toString());
-						String minute=checkZero(minuteSpinner.getValue().toString());
-						String second=checkZero(secondSpinner.getValue().toString());
-						GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName());
-						duration.execute();
+						if (ourFile.exists()){
+							if ((ourFile.getName().endsWith(".mp3"))){
+								mediaPath=ourFile.getAbsolutePath();
+								String hour=checkZero(hourSpinner.getValue().toString());
+								String minute=checkZero(minuteSpinner.getValue().toString());
+								String second=checkZero(secondSpinner.getValue().toString());
+								GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName());
+								duration.execute();
+							}else {
+								JOptionPane.showMessageDialog(null, "Please select a mp3 file");
+							}
+						}else {
+							JOptionPane.showMessageDialog(null, "File doesnt exists, please select an mp3 file");
+						}
 
 					}else {
-						JOptionPane.showMessageDialog(null, "Error please select an appropriate file");
+						JOptionPane.showMessageDialog(null, "Error please select an appropriate mp3 file");
 					}
 					//Do nothing if the cancel option is selected.
 				}else if (status == JFileChooser.CANCEL_OPTION){
@@ -349,10 +382,14 @@ public class AddCommentaryScreen extends JFrame{
 
 				//Starts creating the mp3 file and place it in the tmp folder.
 				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
-					TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
-					tmpFile.execute();
+					if (textfield.getText().length()<=100 && textfield.getText().length()>0 && displayText==false) {
+						TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
+						tmpFile.execute();
+					}else{
+						JOptionPane.showMessageDialog(null, "Please enter between 1-100 characters");
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Error, please enter appropriate commentary");
+					JOptionPane.showMessageDialog(null, "Error, please enter appropriate commentary (No Blank Commentary)");
 				}
 			}
 		});
@@ -468,6 +505,16 @@ public class AddCommentaryScreen extends JFrame{
 				}
 			}
 		});
+
+		textfield.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				//Only clear if user clicked the text box for the first time
+				if (displayText){
+					textfield.setText(""); //Clear text
+					displayText=false;
+				}		
+			}
+		});
 	}
 
 	/**
@@ -517,7 +564,7 @@ public class AddCommentaryScreen extends JFrame{
 		}
 		return true;
 	}
-	
+
 	/**
 	 * This will erase all content of the Add Commentary screen
 	 */
@@ -526,7 +573,8 @@ public class AddCommentaryScreen extends JFrame{
 		hourSpinner.setValue(new Integer("0"));
 		minuteSpinner.setValue(new Integer("0"));
 		secondSpinner.setValue(new Integer("0"));
-		textfield.setText("");
+		textfield.setText("Add Commentary Here......[100 Character Limit]");
+		displayText=true;
 	}
 
 

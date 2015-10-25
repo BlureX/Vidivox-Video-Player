@@ -136,6 +136,16 @@ public class VideoMenu {
 				}
 			}
 		});
+		
+		about.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "Hover over the componenets of Vidivox to get an idea of what " +
+							"the compnenets are meant to do. Also reading the user manual will help users.");
+
+				}
+			
+		});
 	}
 
 }
