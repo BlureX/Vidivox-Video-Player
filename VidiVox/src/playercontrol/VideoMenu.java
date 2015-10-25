@@ -107,7 +107,7 @@ public class VideoMenu {
 				mainPlayer.getMediaPlayerComponent().getMediaPlayer().setPause(true);
 				//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
 				mainPlayer.saveVideo.saveVideoAs();
-				if (mainPlayer.getPlay().getText().equals("pause")){
+				if (mainPlayer.getPlay().getText().equals("Pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
 					mainPlayer.getMediaPlayerComponent().getMediaPlayer().play();
 				}
@@ -125,12 +125,12 @@ public class VideoMenu {
 				if (openfile){
 					mainPlayer.mediapath=openVideoOption.getMediaPath();
 					mainPlayer.getPlayback().turnOffRewindAndFastforward();
-					mainPlayer.getPlay().setText("pause");
+					mainPlayer.getPlay().setText("Pause");
 					mainPlayer.addCommentaryScreen.clearCommentary();
 					mainPlayer.run();
 					mainPlayer.setTitle(openVideoOption.getVideoName());
 				}
-				if (mainPlayer.getPlay().getText().equals("pause")){
+				if (mainPlayer.getPlay().getText().equals("Pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
 					mainPlayer.getMediaPlayerComponent().getMediaPlayer().play();
 				}

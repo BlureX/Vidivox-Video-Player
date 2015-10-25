@@ -8,7 +8,12 @@ import fileconverter.WavToMp3;
 
 import vidVox.gui.AddCommentaryScreen;
 
+/**
+ * @author jxu811
+ * This is a class which will work to add different type of voices.
+ */
 public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
+	//Fields which are used in this class
 	private Process process;
 	private int voice,counter;
 	private AddCommentaryScreen commentary;
@@ -18,10 +23,10 @@ public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
 	protected Void doInBackground() throws Exception {
 		String cmd;
 		filename = "festSpeech" + counter;
-		//creating the bash process which will speak the user high score in festival
-		//voice_rab_diphone british
+		//This option indicates kiwi voice type will be used
 		if (voice==1){
 			cmd="echo \"" + commentaryContent + "\" | text2wave -o \"" +location+".wav\"" + " -eval \"(voice_akl_nz_jdt_diphone)\"";
+		//This option indicates British voice type will be used
 		}else{
 			cmd="echo \"" + commentaryContent + "\" | text2wave -o \"" +location+".wav\"" + " -eval \"(voice_rab_diphone)\"";
 		}
@@ -60,6 +65,7 @@ public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
 		this.voiceType=voiceType;
 	}
 
+	//Converts the wav to mp3
 	@Override
 	public void done(){
 		WavToMp3 k = new WavToMp3(this.location, filename,this.commentary,this.hour,this.minute,this.second,this.commentaryContent,this.voiceType);

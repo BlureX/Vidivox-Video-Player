@@ -264,7 +264,7 @@ public class MainPlayerScreen extends JFrame {
 		topPane.add(getMediaPlayerComponent(), c);	
 
 		//JButton which Plays the video
-		setPlay(new JButton("pause"));
+		setPlay(new JButton("Pause"));
 		getPlay().setToolTipText("Play/Pause button");
 		c = new GridBagConstraints();
 		c.gridx = 2;
@@ -326,12 +326,12 @@ public class MainPlayerScreen extends JFrame {
 				getPlayback().turnOffRewindAndFastforward();
 				//Pauses or plays the video depending if it is playing or paused respectively and also
 				//changes the text of the button to add a more user friendly experience.
-				if (getPlay().getText().equals("play")){
-					getPlay().setText("pause");
+				if (getPlay().getText().equals("Play")){
+					getPlay().setText("Pause");
 					getMediaPlayerComponent().getMediaPlayer().play();
 
 				}else{
-					getPlay().setText("play");
+					getPlay().setText("Play");
 					getMediaPlayerComponent().getMediaPlayer().setPause(true);
 				}
 			}
@@ -357,7 +357,7 @@ public class MainPlayerScreen extends JFrame {
 			@Override
 			public void finished(MediaPlayer mediaPlayer) {
 				getMediaPlayerComponent().getMediaPlayer().stop();
-				getPlay().setText("play");
+				getPlay().setText("Play");
 			}
 		});
 	}
