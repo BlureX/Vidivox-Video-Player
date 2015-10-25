@@ -24,6 +24,7 @@ public class PlaybackControl {
 	public void setUpPlaybackButtons(JPanel bottomPane){
 		//JButton which fast forwards through the video
 		fastforward = new JButton(">>");
+		fastforward.setToolTipText("Fastforward, click again to disable");
 		c = new GridBagConstraints();
 		c.gridx = 3;
 		c.gridy = 0;
@@ -35,6 +36,7 @@ public class PlaybackControl {
 
 		//JButton which fast forwards through the video
 		rewind = new JButton("<<");
+		rewind.setToolTipText("Rewind, click again to disable");
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 0;

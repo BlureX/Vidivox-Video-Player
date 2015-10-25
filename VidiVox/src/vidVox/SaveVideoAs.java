@@ -9,7 +9,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import vidVox.gui.MainPlayerScreen;
 import vidVox.gui.SaveDialogScreen;
-import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811

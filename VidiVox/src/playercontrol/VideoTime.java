@@ -16,10 +16,10 @@ import vidVox.gui.MainPlayerScreen;
  */
 public class VideoTime {
 
-	JLabel timeLabel,endLabel;
-	GridBagConstraints constraints;
+	private JLabel timeLabel,endLabel;
+	private GridBagConstraints constraints;
 	public long totaltime;
-	MainPlayerScreen mainPlayer;
+	private MainPlayerScreen mainPlayer;
 
 	/**
 	 * @param mainPlayer
@@ -38,6 +38,7 @@ public class VideoTime {
 
 		//Adding a Jlabel which will be the starting time of the video
 		timeLabel = new JLabel("00:00:00");
+		timeLabel.setToolTipText("Current Time");
 		constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -50,6 +51,7 @@ public class VideoTime {
 
 		//Adding a Jlabel which will be the ending time of the video
 		endLabel = new JLabel("00:00:00");
+		endLabel.setToolTipText("Total time of Video");
 		constraints = new GridBagConstraints();
 		constraints.gridx = 2;
 		constraints.gridy = 1;

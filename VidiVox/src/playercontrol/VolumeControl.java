@@ -28,7 +28,7 @@ public class VolumeControl {
 	private JSlider volume;
 	private JLabel volumeLabel;
 	private GridBagConstraints  constraint;
-	MainPlayerScreen mainPlayer;
+	private MainPlayerScreen mainPlayer;
 	private JButton mute;
 
 
@@ -63,6 +63,7 @@ public class VolumeControl {
 
 		//JSlider which controls the volume of the video
 		volume = new JSlider();
+		volume.setToolTipText("Sets the volume of the video");
 		constraint = new GridBagConstraints();
 		constraint.gridx = 6;
 		constraint.gridy = 0;
@@ -73,6 +74,7 @@ public class VolumeControl {
 
 		//This will set up the mute button.
 		mute = new JButton("Mute");
+		mute.setToolTipText("Mutes the video");
 		constraint = new GridBagConstraints();
 		constraint.gridx = 7;
 		constraint.gridy = 0;
@@ -117,13 +119,18 @@ public class VolumeControl {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Checks if volume is not already muted and if not, mute it.
-				if (volume.getValue() != 0 ) {
-					currentVolume = volume.getValue();
-					volume.setValue(0);
-					//If muted already, and clicked mute again, it will refer back to the previous value it was just before being muted.
-				} else {
-					volume.setValue(currentVolume);
+				if (mainPlayer.getMediaPlayerComponent().getMediaPlayer().isMute()){
+					mainPlayer.getMediaPlayerComponent().getMediaPlayer().mute(false);
+				}else{
+					mainPlayer.getMediaPlayerComponent().getMediaPlayer().mute(true);
 				}
+//				if (volume.getValue() != 0 ) {
+//					currentVolume = volume.getValue();
+//					volume.setValue(0);
+//					//If muted already, and clicked mute again, it will refer back to the previous value it was just before being muted.
+//				} else {
+//					volume.setValue(currentVolume);
+//				}
 			}
 		});
 

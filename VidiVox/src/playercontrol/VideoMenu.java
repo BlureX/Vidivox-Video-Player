@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import vidVox.MoveFile;
 import vidVox.OpenVideo;
 import vidVox.gui.MainPlayerScreen;
-import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811
@@ -48,25 +47,32 @@ public class VideoMenu {
 
 		//adds a menu to the menu bar
 		video = new JMenu("Video");
+		video.setToolTipText("Allows you to open,save current video or save as current video");
 		menuBar.add(video);
 
 		//open video button
 		openVideo = new JMenuItem("Open Video...");	
+		openVideo.setToolTipText("Opens a video from specified path");
 		video.add(openVideo);
 
 		//save video button
 		saveVideo = new JMenuItem("Save Video...");	
+		saveVideo.setToolTipText("Saves current video with whatever commentary is added");
 		video.add(saveVideo);		
 
 		//save video as button
-		saveVideoAs = new JMenuItem("Save Video as...");	
+		saveVideoAs = new JMenuItem("Save Video as...");
+		saveVideoAs.setToolTipText("Save current video in a specified path");
 		video.add(saveVideoAs);
 
+		//Help menu
 		help = new JMenu("About");
+		help.setToolTipText("Help Menu");
 		menuBar.add(help);
 
-		//save video as button
-		about = new JMenuItem("Help");	
+		//About button used for helping users
+		about = new JMenuItem("Help Menu");	
+		about.setToolTipText("Informs user about the functionality of the program");
 		help.add(about);
 
 		return menuBar;	
@@ -87,7 +93,7 @@ public class VideoMenu {
 				if (MainPlayerScreen.mediapath == null){
 					JOptionPane.showMessageDialog(null, "Error, please open a video before trying to save.");
 				}else{
-					MoveFile k = new MoveFile(mainPlayer.mediapath, TextToMp3Screen.originalVideo,false);
+					MoveFile k = new MoveFile(mainPlayer.mediapath, mainPlayer.originalVideo,false);
 					k.execute();
 					MainPlayerScreen.saved=true;
 				}
@@ -120,6 +126,7 @@ public class VideoMenu {
 					mainPlayer.mediapath=openVideoOption.getMediaPath();
 					mainPlayer.getPlayback().turnOffRewindAndFastforward();
 					mainPlayer.getPlay().setText("pause");
+					mainPlayer.addCommentaryScreen.clearCommentary();
 					mainPlayer.run();
 					mainPlayer.setTitle(openVideoOption.getVideoName());
 				}

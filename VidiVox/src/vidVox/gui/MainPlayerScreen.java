@@ -59,10 +59,14 @@ public class MainPlayerScreen extends JFrame {
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
 	public static boolean saved=true;
+	public static int videoNumber =0;
+	public static String originalVideo;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	private VolumeControl volumeFunctionality;
 	private PositionSlider progressSlider;
 	private VideoTime videoTime;
+	private long originalVideoLength;
+	
 
 	//Set up the GridBag Layout for my screen.
 	private GridBagLayout gbl_topPane;
@@ -78,26 +82,6 @@ public class MainPlayerScreen extends JFrame {
 	private VideoMenu videoMenu;
 
 	private PlaybackControl playback;
-
-	//	/**
-	//	 * Main Method used to start my application.
-	//	 * Also used code from https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
-	//	 * additional features such as progress bar.
-	//	 * @param args
-	//	 */
-	//	public static void main(String[] args) {
-	//		//Initialising all the screens which will be used in the video player.
-	//		MainPlayerScreen frame = new MainPlayerScreen();
-	//		frame.setBounds(300, 200, 820, 650);
-	//		frame.setMinimumSize(new Dimension(820, 1));
-	//		frame.setVisible(true);
-	//
-	//		loadingScreen.setBounds(510, 495, 400, 60);
-	//		loadingScreen.setMinimumSize(new Dimension(400, 60));
-	//		addCommentaryScreen = new AddCommentaryScreen(frame);
-	//		addCommentaryScreen.setBounds(285, 475, 850, 500);
-	//		addCommentaryScreen.setMinimumSize(new Dimension(650, 500));
-	//	}
 
 	/**
 	 * Constructor for my class.
@@ -125,7 +109,7 @@ public class MainPlayerScreen extends JFrame {
 						if (MainPlayerScreen.mediapath == null){
 							JOptionPane.showMessageDialog(null, "Error please open a video before trying to save");
 						} else { 
-							MoveFile k = new MoveFile(mediapath, TextToMp3Screen.originalVideo,false);
+							MoveFile k = new MoveFile(mediapath, originalVideo,false);
 							k.execute();
 						}
 					} else if (choice == 1) {
@@ -161,7 +145,7 @@ public class MainPlayerScreen extends JFrame {
 		final int position = (int)(getMediaPlayerComponent().getMediaPlayer().getPosition() * 1000.0f);
 		//This will get the total length of the video.
 		final long duration= getMediaPlayerComponent().getMediaPlayer().getLength();
-
+		setOriginalVideoLength(duration/1000);
 		//This will be used to update the GUI.
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -218,6 +202,7 @@ public class MainPlayerScreen extends JFrame {
 			final long time = mediaPlayerComponent.getMediaPlayer().getTime();
 			final int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
 			final long duration= mediaPlayerComponent.getMediaPlayer().getLength();
+			setOriginalVideoLength(duration/1000);
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -280,6 +265,7 @@ public class MainPlayerScreen extends JFrame {
 
 		//JButton which Plays the video
 		setPlay(new JButton("pause"));
+		getPlay().setToolTipText("Play/Pause button");
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.gridy = 0;
@@ -300,6 +286,7 @@ public class MainPlayerScreen extends JFrame {
 		videoTime.setUpTime(topPane);
 		//JSlider which controls the volume of the video
 		addCommentaryButton = new JButton("Add Commentary");
+		addCommentaryButton.setToolTipText("Allows you to add commentary");
 		c = new GridBagConstraints();
 		c.gridx = 8;
 		c.gridy = 0;
@@ -379,37 +366,32 @@ public class MainPlayerScreen extends JFrame {
 	public JButton getPlay() {
 		return play;
 	}
-
 	public void setPlay(JButton play) {
 		this.play = play;
 	}
-
 	public PositionSlider getProgressSlider() {
 		return progressSlider;
 	}
-
 	public void setProgressSlider(PositionSlider progressSlider) {
 		this.progressSlider = progressSlider;
 	}
-
-
 	public PlaybackControl getPlayback() {
 		return playback;
 	}
-
-
 	public void setPlayback(PlaybackControl playback) {
 		this.playback = playback;
 	}
-
-
 	public EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
 		return mediaPlayerComponent;
 	}
-
-
 	public void setMediaPlayerComponent(EmbeddedMediaPlayerComponent mediaPlayerComponent) {
 		this.mediaPlayerComponent = mediaPlayerComponent;
+	}
+	public long getOriginalVideoLength() {
+		return originalVideoLength;
+	}
+	public void setOriginalVideoLength(long originalVideoLength) {
+		this.originalVideoLength = originalVideoLength;
 	}
 
 

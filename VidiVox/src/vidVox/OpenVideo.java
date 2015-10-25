@@ -6,7 +6,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import vidVox.gui.MainPlayerScreen;
-import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811
@@ -39,9 +38,14 @@ public class OpenVideo {
 			if (ourFile.exists()){
 				setMediaPath(ourFile.getAbsolutePath());
 				setVideoName(ourFile.getName());
-				TextToMp3Screen.originalVideo = getMediaPath();
-				MainPlayerScreen.saved=true;
-				return true;
+				if ((ourFile.getName().endsWith(".mp4"))||(ourFile.getName().endsWith(".avi"))){
+					MainPlayerScreen.originalVideo = getMediaPath();
+					MainPlayerScreen.saved=true;
+					return true;
+				}else{
+					JOptionPane.showMessageDialog(null, "Invalid File, Not appropriate avi or mp4 format");
+					return false;
+				}
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid File");
 				return false;

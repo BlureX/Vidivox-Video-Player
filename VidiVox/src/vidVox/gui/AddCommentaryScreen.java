@@ -41,23 +41,24 @@ import vidVox.workers.TextToFile;
  * Add Commentary button in the main player.
  */
 public class AddCommentaryScreen extends JFrame{
-	AddCommentaryScreen addCommentary= this;
+	private AddCommentaryScreen addCommentary= this;
 	public static JFileChooser ourFileSelector= new JFileChooser();
 	private JPanel pane;
 	private JTextField textfield;
-	public static TextToMp3Screen createCommentaryScreen;
 	private JSpinner hourSpinner;
 	private JSpinner minuteSpinner;
 	private JSpinner secondSpinner;
 	private int counter=0;
-	final DefaultTableModel commentaryTable;
-	final JTable table;
-	List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
+	private final DefaultTableModel commentaryTable;
+	private final JTable table;
+	private List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
+	private MainPlayerScreen mainPlayer;
 	/**
 	 * @param screen
 	 * Constructor for my AddCommentary class
 	 */
-	public AddCommentaryScreen (MainPlayerScreen screen){
+	public AddCommentaryScreen (final MainPlayerScreen  mainPlayer){
+		this.mainPlayer=mainPlayer;
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				for (PreviewMP3 festival: voiceList){
@@ -68,15 +69,9 @@ public class AddCommentaryScreen extends JFrame{
 			}
 		});
 
-		//making the main initial layout for the AddCommentaryScreen
-		//setBounds(450, 450, 850, 100);
 		//Create gridbag constrant variable.
 		GridBagConstraints c = new GridBagConstraints();
 		setTitle("Add Commentary");
-		createCommentaryScreen = new TextToMp3Screen(screen);
-		createCommentaryScreen.setBounds(385, 475, 650, 100);
-		createCommentaryScreen.setMinimumSize(new Dimension(650, 100));
-
 		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add",""};
 
 		commentaryTable = new DefaultTableModel(audioOverlayOptions,0){
@@ -134,6 +129,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton selectMp3 = new JButton("Add mp3 Commentary");
+		selectMp3.setToolTipText("Adds a mp3 file to the table");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 1;
@@ -145,6 +141,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//creating a JButton which allows you to delete the selected commentary.
 		JButton deleteRow = new JButton("Delete Commentary");
+		deleteRow.setToolTipText("Deletes selected commentary");
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.gridy = 1;
@@ -157,6 +154,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//creating a Jbutton which will add commentary to the start of the video
 		JButton createCommentary = new JButton("Create Commentary");
+		createCommentary.setToolTipText("Creates commentary from the text in text box and duration specified");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 2;
@@ -182,6 +180,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//This is a textfield box which allow you to create commentary to add to the video.
 		textfield = new JTextField();
+		textfield.setToolTipText("Place to add commentary");
 		c = new GridBagConstraints();
 		c.gridx = 1;
 		c.gridy = 2;
@@ -195,6 +194,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//This is labels to indicate what each spinner model corresponds to.
 		JLabel label1 = new JLabel("HH:MM:SS");
+		label1.setToolTipText("Hours:Minute:Seconds");
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 1;
@@ -208,6 +208,7 @@ public class AddCommentaryScreen extends JFrame{
 		//This is the hour spinner model which will correspond to the hour you want to add the commentary at.
 		SpinnerModel hourSpinnerModel = new SpinnerNumberModel(0,0,99,1);
 		hourSpinner = new JSpinner(hourSpinnerModel);
+		hourSpinner.setToolTipText("Hours");
 		c = new GridBagConstraints();
 		c.gridx = 3;
 		c.gridy = 2;
@@ -221,6 +222,7 @@ public class AddCommentaryScreen extends JFrame{
 		//This is the minute spinner model which will correspond to the minute you want to add the commentary at.
 		SpinnerModel minuteSpinnerModel = new SpinnerNumberModel(0,0,60,1);
 		minuteSpinner = new JSpinner(minuteSpinnerModel);
+		minuteSpinner.setToolTipText("Minutes");
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
@@ -228,20 +230,21 @@ public class AddCommentaryScreen extends JFrame{
 		c.weighty = 0;
 		//c.gridwidth = 1;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(0,2,0,0);
+		c.insets = new Insets(0,4,0,0);
 		pane.add(minuteSpinner, c);
 
 		//This is the second spinner model which will correspond to the second you want to add the commentary at.
 		SpinnerModel secondSpinnerModel = new SpinnerNumberModel(0,0,60,1);
 		secondSpinner = new JSpinner(secondSpinnerModel);
+		secondSpinner.setToolTipText("Seconds");
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0;
 		//c.gridwidth = 1;
-		//c.anchor = GridBagConstraints.WEST;
-		//c.insets = new Insets(0,0,0,0);
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(0,50,0,0);
 		pane.add(secondSpinner, c);
 
 		//Empty JLabel to organise the gridbag layout more nicely.
@@ -264,6 +267,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//Preview video button which will allow you to preview the video with all the commentary.
 		JButton createVideo = new JButton("Preview Video");
+		createVideo.setToolTipText("Creates the video from the commentaries in the table");
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 3;
@@ -278,6 +282,7 @@ public class AddCommentaryScreen extends JFrame{
 
 		//Button which will allow you to preview the commentary that is to be added.
 		JButton preview = new JButton("Preview");
+		preview.setToolTipText("Previews a selected commentary");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 3;
@@ -290,14 +295,15 @@ public class AddCommentaryScreen extends JFrame{
 
 		//Button which will allow you to save your created commentary to a location.
 		JButton saveButton = new JButton("Save");
+		saveButton.setToolTipText("Saves Selected Commentary");
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 1;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.anchor = GridBagConstraints.CENTER;
-		c.insets = new Insets(3,5,3,0);
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(3,0,3,40);
 		pane.add(saveButton, c);
 
 		//Action listener which will allow you to choose a file for adding mp3.
@@ -315,19 +321,9 @@ public class AddCommentaryScreen extends JFrame{
 					if (!(ourFileSelector.getSelectedFile() == null)){
 						ourFile=ourFileSelector.getSelectedFile();
 						mediaPath=ourFile.getAbsolutePath();
-						String hour=hourSpinner.getValue().toString();
-						String minute=minuteSpinner.getValue().toString();
-						String second=secondSpinner.getValue().toString();
-
-						if (hourSpinner.getValue().toString().length()<=1){
-							hour="0"+hourSpinner.getValue().toString();
-						}
-						if (minuteSpinner.getValue().toString().length()<=1){
-							minute="0"+minuteSpinner.getValue().toString();
-						}
-						if (secondSpinner.getValue().toString().length()<=1){
-							second="0"+secondSpinner.getValue().toString();
-						}
+						String hour=checkZero(hourSpinner.getValue().toString());
+						String minute=checkZero(minuteSpinner.getValue().toString());
+						String second=checkZero(secondSpinner.getValue().toString());
 						GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName());
 						duration.execute();
 
@@ -347,19 +343,10 @@ public class AddCommentaryScreen extends JFrame{
 				//Increase counter to ensure that the save location of commentary is not the same.
 				counter++;
 				//Appends the 0 to front of the time if it is in single digits.
-				String hour=hourSpinner.getValue().toString();
-				String minute=minuteSpinner.getValue().toString();
-				String second=secondSpinner.getValue().toString();
+				String hour=checkZero(hourSpinner.getValue().toString());
+				String minute=checkZero(minuteSpinner.getValue().toString());
+				String second=checkZero(secondSpinner.getValue().toString());
 
-				if (hourSpinner.getValue().toString().length()<=1){
-					hour="0"+hourSpinner.getValue().toString();
-				}
-				if (minuteSpinner.getValue().toString().length()<=1){
-					minute="0"+minuteSpinner.getValue().toString();
-				}
-				if (secondSpinner.getValue().toString().length()<=1){
-					second="0"+secondSpinner.getValue().toString();
-				}
 				//Starts creating the mp3 file and place it in the tmp folder.
 				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
 					TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
@@ -394,7 +381,7 @@ public class AddCommentaryScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int totalRows = table.getRowCount();
 				if (totalRows > 0){
-					String cmd = "ffmpeg -y -i " + TextToMp3Screen.originalVideo + " ";
+					String cmd = "ffmpeg -y -i " + MainPlayerScreen.originalVideo + " ";
 					for (int i = 0 ; i<totalRows; i++){
 						String fileName = table.getModel().getValueAt(i,3).toString();
 						String time = table.getValueAt(i,2).toString();
@@ -408,7 +395,7 @@ public class AddCommentaryScreen extends JFrame{
 					}
 					cmd = cmd + "-c:v copy -async 1 -filter_complex amix=inputs=" + (totalRows+1) + " ";
 					//System.out.println(cmd);
-					OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true);
+					OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true,mainPlayer);
 					mergeVideo.execute();
 					setVisible(false);
 					MainPlayerScreen.saved=false;
@@ -493,8 +480,53 @@ public class AddCommentaryScreen extends JFrame{
 	 * This will add the content, duration, time of video and path of commentary into the table.
 	 */
 	public void addToTable(String content, String duration, String hour, String minute, String second, String path){
-		Object[] data = { content , duration, hour+":"+minute+":"+second,path };
-		commentaryTable.addRow(data);
+		if (checkTime(duration,hour,minute,second)){
+			Object[] data = { content , duration, hour+":"+minute+":"+second,path };
+			commentaryTable.addRow(data);
+		}else{
+			JOptionPane.showMessageDialog(null, "Commentary will exceed the video length");
+		}
+	}
+
+	/**
+	 * @param number
+	 * @return
+	 * This will append the 0 to the front of the number if it is of size 1
+	 */
+	public String checkZero(String number){
+		if (number.length()<=1){
+			number="0"+number;
+		}
+		return number;
+	}
+
+	/**
+	 * @param duration
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @return
+	 * This will check the duration and time of placement of a commentary and see if it exceeds the duration of the
+	 * video. It will return true if it doesn't but return false if it does.
+	 */
+	public boolean checkTime(String duration, String hour, String minute, String second){
+		float totalTime= (Long.parseLong(hour)*3600) + (Long.parseLong(minute)*60) + (Long.parseLong(second))+Float.parseFloat(duration);
+		float videoTime =mainPlayer.getOriginalVideoLength();
+		if (videoTime < totalTime){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * This will erase all content of the Add Commentary screen
+	 */
+	public void clearCommentary(){
+		commentaryTable.setRowCount(0);
+		hourSpinner.setValue(new Integer("0"));
+		minuteSpinner.setValue(new Integer("0"));
+		secondSpinner.setValue(new Integer("0"));
+		textfield.setText("");
 	}
 
 

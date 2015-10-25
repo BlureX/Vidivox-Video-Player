@@ -16,7 +16,7 @@ import vidVox.gui.MainPlayerScreen;
 /**
  * This class will help set up the position slider and all its functionality 
  * in the Vidivox video commentator.
- * Also used code from 
+ * Also referenced code from 
  * https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
  * additional features such as progress bar.
  * @author jxu811
@@ -43,6 +43,7 @@ public class PositionSlider {
 	public void setUpPositionSlider(JPanel topPane){
 		//Adding the position Slider which will change as the video progresses
 		setPositionSlider(new JSlider());
+		getPositionSlider().setToolTipText("Click or drag to go to any part of video and updates you on progress of video");
 		getPositionSlider().setMinimum(0);
 		getPositionSlider().setMaximum(1000);
 		getPositionSlider().setValue(0);
