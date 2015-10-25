@@ -11,8 +11,8 @@ import javax.swing.JOptionPane;
 
 import vidVox.MoveFile;
 import vidVox.OpenVideo;
-import vidVox.guiScreens.MainPlayerScreen;
-import vidVox.guiScreens.TextToMp3Screen;
+import vidVox.gui.MainPlayerScreen;
+import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811
@@ -22,8 +22,8 @@ public class VideoMenu {
 
 	//Menu at the top which allows users to select their appropriate options.
 	JMenuBar menuBar;
-	JMenu video;
-	JMenuItem openVideo, saveVideo, saveVideoAs;
+	JMenu video,help;
+	JMenuItem openVideo, saveVideo, saveVideoAs,about;
 	MainPlayerScreen mainPlayer;
 	OpenVideo openVideoOption=new OpenVideo();
 
@@ -61,6 +61,14 @@ public class VideoMenu {
 		//save video as button
 		saveVideoAs = new JMenuItem("Save Video as...");	
 		video.add(saveVideoAs);
+		
+		help = new JMenu("About");
+		menuBar.add(help);
+		
+		//save video as button
+		about = new JMenuItem("Help");	
+		help.add(about);
+		
 		return menuBar;	
 	}
 
@@ -93,7 +101,7 @@ public class VideoMenu {
 				mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
 				//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
 				mainPlayer.saveVideo.saveVideoAs();
-				if (mainPlayer.play.getText().equals("pause")){
+				if (mainPlayer.getPlay().getText().equals("pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
 					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
 				}
@@ -110,12 +118,12 @@ public class VideoMenu {
 				boolean openfile=openVideoOption.grabFile();
 				if (openfile){
 					mainPlayer.mediapath=openVideoOption.getMediaPath();
-					mainPlayer.turnOffRewindAndFastforward();
-					mainPlayer.play.setText("pause");
+					mainPlayer.getPlayback().turnOffRewindAndFastforward();
+					mainPlayer.getPlay().setText("pause");
 					mainPlayer.run();
 					mainPlayer.setTitle(openVideoOption.getVideoName());
 				}
-				if (mainPlayer.play.getText().equals("pause")){
+				if (mainPlayer.getPlay().getText().equals("pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
 					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
 				}

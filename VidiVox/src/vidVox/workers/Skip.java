@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
-import vidVox.guiScreens.MainPlayerScreen;
+import vidVox.gui.MainPlayerScreen;
 
 /**
  * @author jxu811
@@ -34,12 +34,12 @@ public class Skip extends SwingWorker<Void,Integer>{
 			Thread.sleep(100);
 			//Updates the GUI.
 			player.updateGUI();	
-			float positionValue = player.progressSlider.getPositionSlider().getValue() / 1000.0f;
+			float positionValue = player.getProgressSlider().getPositionSlider().getValue() / 1000.0f;
 			//This will check for when it is fastforwarding and reaches end of video, it will stop it
 			//otherwise it will operate normally or it can rewind when it reaches end of video.
 			if((positionValue > 0.99f)&&(skipRate != -1000)) {
 				media.getMediaPlayer().stop();
-				player.play.setText("play");
+				player.getPlay().setText("play");
 			}else{ 
 				publish();
 			}

@@ -11,7 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 
-import vidVox.guiScreens.MainPlayerScreen;
+import vidVox.gui.MainPlayerScreen;
 
 /**
  * This class will help set up the position slider and all its functionality 
@@ -108,10 +108,10 @@ public class PositionSlider {
 			public void mousePressed(MouseEvent e) {
 				refresh=true;
 				if(mainPlayer.mediaPlayerComponent.getMediaPlayer().isPlaying()) {
-					pressedWhilePlaying = true;
+					setPressedWhilePlaying(true);
 				}
 				else {
-					pressedWhilePlaying = false;
+					setPressedWhilePlaying(false);
 				}
 				//This will allow you to go to a certain point in the video by clicking on the position slider and then updates
 				//the video based on where you clicked.
@@ -140,5 +140,13 @@ public class PositionSlider {
 
 	public void setPositionSlider(JSlider positionSlider) {
 		this.positionSlider = positionSlider;
+	}
+
+	public boolean isPressedWhilePlaying() {
+		return pressedWhilePlaying;
+	}
+
+	public void setPressedWhilePlaying(boolean pressedWhilePlaying) {
+		this.pressedWhilePlaying = pressedWhilePlaying;
 	}
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import vidVox.guiScreens.TextToMp3Screen;
+import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811

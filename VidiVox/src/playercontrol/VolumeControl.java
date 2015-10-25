@@ -16,7 +16,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
-import vidVox.guiScreens.MainPlayerScreen;
+import vidVox.gui.MainPlayerScreen;
 
 /**
  * This class is used for setting up the volume control in my Vidivox.

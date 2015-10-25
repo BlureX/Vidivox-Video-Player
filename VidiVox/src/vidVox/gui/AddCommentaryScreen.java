@@ -1,4 +1,4 @@
-package vidVox.guiScreens;
+	package vidVox.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -53,16 +53,11 @@ public class AddCommentaryScreen extends JFrame{
 	final DefaultTableModel commentaryTable;
 	final JTable table;
 	List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
-
-
 	/**
 	 * @param screen
 	 * Constructor for my AddCommentary class
 	 */
 	public AddCommentaryScreen (MainPlayerScreen screen){
-
-
-
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				for (PreviewMP3 festival: voiceList){
@@ -72,7 +67,6 @@ public class AddCommentaryScreen extends JFrame{
 				voiceList=new ArrayList<PreviewMP3>();	
 			}
 		});
-
 
 		//making the main initial layout for the AddCommentaryScreen
 		//setBounds(450, 450, 850, 100);
@@ -116,9 +110,7 @@ public class AddCommentaryScreen extends JFrame{
 		//Code which I have referenced to hide the table
 		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
 		table.removeColumn(table.getColumnModel().getColumn(3));
-
-
-
+		
 		JScrollPane scrollPane = new JScrollPane(); 
 		// scrollPane.setBounds(20, 75, 400, 400);
 		scrollPane.setViewportView(table);
@@ -273,13 +265,14 @@ public class AddCommentaryScreen extends JFrame{
 		//Preview video button which will allow you to preview the video with all the commentary.
 		JButton createVideo = new JButton("Preview Video");
 		c = new GridBagConstraints();
-		c.gridx = 0;
+		c.gridx = 4;
 		c.gridy = 3;
 		c.gridwidth = 0;
 		c.weightx = 1;
 		c.weighty = 1;
-		c.anchor = GridBagConstraints.EAST;
+		//c.anchor = GridBagConstraints.EAST;
 		c.insets = new Insets(0,0,0,10);
+		c.anchor = GridBagConstraints.WEST;
 		//c.insets = new Insets(3,3,3,3);
 		pane.add(createVideo, c);
 
@@ -307,7 +300,6 @@ public class AddCommentaryScreen extends JFrame{
 		c.insets = new Insets(3,5,3,0);
 		pane.add(saveButton, c);
 
-
 		//Action listener which will allow you to choose a file for adding mp3.
 		selectMp3.addActionListener(new ActionListener() {
 			@Override
@@ -326,7 +318,7 @@ public class AddCommentaryScreen extends JFrame{
 						String hour=hourSpinner.getValue().toString();
 						String minute=minuteSpinner.getValue().toString();
 						String second=secondSpinner.getValue().toString();
-
+						
 						if (hourSpinner.getValue().toString().length()<=1){
 							hour="0"+hourSpinner.getValue().toString();
 						}
@@ -402,7 +394,7 @@ public class AddCommentaryScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				int totalRows = table.getRowCount();
 				if (totalRows > 0){
-					String cmd = "ffmpeg -y -i " + MainPlayerScreen.mediapath + " ";
+					String cmd = "ffmpeg -y -i " + TextToMp3Screen.originalVideo + " ";
 					for (int i = 0 ; i<totalRows; i++){
 						String fileName = table.getModel().getValueAt(i,3).toString();
 						String time = table.getValueAt(i,2).toString();
@@ -490,7 +482,6 @@ public class AddCommentaryScreen extends JFrame{
 			}
 		});
 	}
-
 
 	/**
 	 * @param content

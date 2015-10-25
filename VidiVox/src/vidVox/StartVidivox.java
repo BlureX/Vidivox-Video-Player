@@ -2,9 +2,9 @@ package vidVox;
 
 import java.awt.Dimension;
 
-import vidVox.guiScreens.AddCommentaryScreen;
-import vidVox.guiScreens.LoadingScreen;
-import vidVox.guiScreens.MainPlayerScreen;
+import vidVox.gui.AddCommentaryScreen;
+import vidVox.gui.LoadingScreen;
+import vidVox.gui.MainPlayerScreen;
 
 public class StartVidivox {
 

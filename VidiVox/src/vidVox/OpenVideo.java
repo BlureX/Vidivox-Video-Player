@@ -5,8 +5,8 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import vidVox.guiScreens.MainPlayerScreen;
-import vidVox.guiScreens.TextToMp3Screen;
+import vidVox.gui.MainPlayerScreen;
+import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811

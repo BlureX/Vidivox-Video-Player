@@ -1,4 +1,4 @@
-package vidVox.guiScreens;
+package vidVox.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
+import playercontrol.PlaybackControl;
 import playercontrol.PositionSlider;
 import playercontrol.VideoMenu;
 import playercontrol.VideoTime;
@@ -40,30 +41,31 @@ public class MainPlayerScreen extends JFrame {
 	MainPlayerScreen mainplayer = this;
 	private JPanel topPane, bottomPane;
 	public EmbeddedMediaPlayerComponent mediaPlayerComponent;
-	Skip ffswing, rwswing;
+//	private Skip ffswing, rwswing;
 	public static String mediapath;
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
-	private boolean ff=false, rw=false,pressedWhilePlaying = false;
+	//private boolean ff=false, rw=false,pressedWhilePlaying = false;
 	public static boolean saved=true;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-	VolumeControl volumeFunctionality;
-	public PositionSlider progressSlider;
-	VideoTime videoTime;
+	private VolumeControl volumeFunctionality;
+	private PositionSlider progressSlider;
+	private VideoTime videoTime;
 	//Set up the GridBag Layout for my screen.
-	GridBagLayout gbl_topPane;
-	GridBagLayout gbl_bottomPane;
-	GridBagConstraints c;
+	private GridBagLayout gbl_topPane;
+	private  GridBagLayout gbl_bottomPane;
+	private  GridBagConstraints c;
 
 	//Buttons, sliders and labels which are used in my GUI for users to click.
-	JButton fastforward, rewind;
-	public JButton play;
-	JButton addCommentaryButton;
-
+//	private  JButton fastforward, rewind;
+	private JButton play;
+	private JButton addCommentaryButton;
 	public SaveVideoAs saveVideo = new SaveVideoAs();
 
 	//Menu at the top which allows users to select their appropriate options.
-	VideoMenu videoMenu;
+	private VideoMenu videoMenu;
+	
+	private PlaybackControl playback;
 
 	//	/**
 	//	 * Main Method used to start my application.
@@ -154,7 +156,7 @@ public class MainPlayerScreen extends JFrame {
 			public void run() {
 				if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 					videoTime.updateTime(time);
-					progressSlider.updatePosition(position);
+					getProgressSlider().updatePosition(position);
 					videoTime.updateDuration(duration);
 				}
 			}
@@ -162,13 +164,12 @@ public class MainPlayerScreen extends JFrame {
 		//This will execute the code at a fixed rate.
 		executorService.scheduleAtFixedRate(new UpdateRunnable(mediaPlayerComponent), 0, 100, TimeUnit.MILLISECONDS);
 	}
-
 	/**
 	 * Update the GUI as it plays.
 	 */
 	public void updateGUI() {
 		if(!mediaPlayerComponent.getMediaPlayer().isPlaying()) {
-			if(!pressedWhilePlaying) {
+			if(!progressSlider.isPressedWhilePlaying()) {
 				try {
 					Thread.sleep(100);
 				}
@@ -185,11 +186,8 @@ public class MainPlayerScreen extends JFrame {
 		long time = mediaPlayerComponent.getMediaPlayer().getTime();
 		int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
 		videoTime.updateTime(time);
-		progressSlider.updatePosition(position);
+		getProgressSlider().updatePosition(position);
 	}
-
-
-
 
 	/**
 	 * @author jxu811
@@ -214,7 +212,7 @@ public class MainPlayerScreen extends JFrame {
 					if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
 						//Updates time position and duration.
 						videoTime.updateTime(time);
-						progressSlider.updatePosition(position);
+						getProgressSlider().updatePosition(position);
 						videoTime.updateDuration(duration);
 					}
 				}
@@ -256,8 +254,8 @@ public class MainPlayerScreen extends JFrame {
 		//Adding in the video area where a mp4 can be played
 		mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 		mediaPlayerComponent.setPreferredSize(new Dimension(600,480));
-		ff=false;
-		rw=false;
+//		ff=false;
+//		rw=false;
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -268,45 +266,23 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(10,10,10,10);
 		topPane.add(mediaPlayerComponent, c);	
 
-		//JButton which fast forwards through the video
-		fastforward = new JButton(">>");
-		c = new GridBagConstraints();
-		c.gridx = 3;
-		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 1;
-		c.insets = new Insets(0,5,0,10);
-		//	c.anchor = GridBagConstraints.EAST;
-		bottomPane.add(fastforward, c);
-
-		//JButton which fast forwards through the video
-		rewind = new JButton("<<");
-		c = new GridBagConstraints();
-		c.gridx = 1;
-		c.gridy = 0;
-		c.weightx = 0;
-		c.weighty = 1;
-		c.insets = new Insets(0,10,0,5);
-		c.anchor = GridBagConstraints.WEST;
-		bottomPane.add(rewind, c);
-
 		//JButton which Plays the video
-		play = new JButton("pause");
+		setPlay(new JButton("pause"));
 		c = new GridBagConstraints();
 		c.gridx = 2;
 		c.gridy = 0;
 		c.weightx = 0;
 		c.weighty = 1;
 		c.insets = new Insets(0,5,0,5);
-		bottomPane.add(play, c);
+		bottomPane.add(getPlay(), c);
 
 		//This will set up the volume controls such as mute and volume slider.
 		volumeFunctionality = new VolumeControl(mainplayer,c);
 		volumeFunctionality.setUpVolume(bottomPane);
 
 		//This will set up the progress bar for my video controller.
-		progressSlider=new PositionSlider(mainplayer,c);
-		progressSlider.setUpPositionSlider(topPane);
+		setProgressSlider(new PositionSlider(mainplayer,c));
+		getProgressSlider().setUpPositionSlider(topPane);
 
 		videoTime = new VideoTime(mainplayer);
 		videoTime.setUpTime(topPane);
@@ -320,24 +296,12 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,10,0,10);
 		c.anchor = GridBagConstraints.EAST;
 		bottomPane.add(addCommentaryButton, c);	 
+		
+		setPlayback(new PlaybackControl(mainplayer));
+		getPlayback().setUpPlaybackButtons(bottomPane);
 
 
 	}
-	/**
-	 * This will check if rewind and fastforward are currently on and turn them off.
-	 */
-	public void turnOffRewindAndFastforward(){
-		if (ff==true){
-			ffswing.cancel(true);
-		}
-		if (rw==true){
-			rwswing.cancel(true);
-		}
-		ff=false;
-		rw=false;
-	}
-
-
 
 	/**
 	 * Set up listeners for my buttons in my GUI
@@ -346,128 +310,40 @@ public class MainPlayerScreen extends JFrame {
 		//Sets up action listener for volume slider and mute button.
 		volumeFunctionality.setUpListener();
 		//Sets up action listener for progress slider.
-		progressSlider.setUpListeners();
+		getProgressSlider().setUpListeners();
+		
+		getPlayback().setUpPlaybackListeners();
+
 
 		//This will set up the video menu bar
 		videoMenu.setUpMenuListeners();
 
 		//Adds an action listener when the play button is clicked.
-		play.addActionListener(new ActionListener() {
+		getPlay().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Check if fast forwarding or rewind is on when the play/pause button is clicked
 				//and will cancel it.
-				turnOffRewindAndFastforward();
+				getPlayback().turnOffRewindAndFastforward();
 				//Pauses or plays the video depending if it is playing or paused respectively and also
 				//changes the text of the button to add a more user friendly experience.
-				if (play.getText().equals("play")){
-					play.setText("pause");
+				if (getPlay().getText().equals("play")){
+					getPlay().setText("pause");
 					mediaPlayerComponent.getMediaPlayer().play();
 
 				}else{
-					play.setText("play");
+					getPlay().setText("play");
 					mediaPlayerComponent.getMediaPlayer().setPause(true);
 				}
 			}
 		});
-		//Added action listener for the rewind(<<) button when it is clicked.
-		rewind.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Press rewind button while fastforwarding and not rewinding will result in fast
-				//forward being canceled and rewind being used.
-				if ((ff==true)&&(rw==false)){
-					rwswing= new Skip(mediaPlayerComponent,-1000,mainplayer);
-					ffswing.cancel(true);
-					rwswing.skip=true;
-					rwswing.execute();
-					rw=true;
-					ff=false;
-					//Press rewind button while not rewinding or fast forwarding will result in rewind 
-					//just being executed.
-				}else if ((rw==false)&&(ff==false)){
-					rwswing= new Skip(mediaPlayerComponent,-1000,mainplayer);
-					rwswing.skip=true;
-					rwswing.execute();
-					rw=true;
-					//Press rewind button while rewinding and not fast forwarding will cause rewind 
-					//to be canceled.
-				}else if ((rw==true) && (ff==false)){
-					rwswing.cancel(true);
-					rw=false;
-					//Will pause the component if rewind is canceled and it was paused when rewinding.
-					if (play.getText().equals("play")){
-						mediaPlayerComponent.getMediaPlayer().setPause(true);
-					}
-					//Last case where you press the rewind button whilst its rewinding and fastforwarding
-					//which cant occur but act as a backup code in base of bugs.
-				}else{
-					rwswing.cancel(true);
-					rw=false;
-					ffswing.cancel(true);
-					ff=false;
-					//Sets the play button to an appropriate button.
-					if (play.getText().equals("play")){
-						mediaPlayerComponent.getMediaPlayer().setPause(true);
-					}
-				}
-			}
-		});
-		//Added action listener for the fastforward (>>) button when it is clicked.
-		fastforward.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Checks for when fastforward button is clicked when fastforward is off and rewind
-				//is on. It will cause the rewind function to cancel and execute the fastforward.
-				if((ff==false)&&(rw==true)){
-					ffswing = new Skip(mediaPlayerComponent,1000,mainplayer);
-					rwswing.cancel(true);
-					ffswing.skip=true;
-					ffswing.execute();
-					ff=true;
-					rw=false;
-					//Checks whether fastforward button is clicked when fastforward is off and rewind
-					//is off. It will cause fastforward to execute.
-				}else if ((ff==false)&&(rw==false)){
-					ffswing = new Skip(mediaPlayerComponent,1000,mainplayer);
-					ffswing.skip=true;
-					ffswing.execute();
-					ff=true;
-					//Checks whether fastforward button is clicked when fastforward is on and rewind
-					//is off. It will cause fastforward to stop.
-				}else if ((ff==true)&&(rw==false)){
-					//ffswing.skip=false;
-					ffswing.cancel(true);
-					ff=false;
-					if (play.getText().equals("play")){
-						mediaPlayerComponent.getMediaPlayer().setPause(true);
-					}
-					//Last case where you press the fastforward button whilst its rewinding and fastforwarding
-					//which cant occur but act as a backup code in base of bugs.
-				}else{
-					rwswing.cancel(true);
-					rw=false;
-					ffswing.cancel(true);
-					ff=false;
-					if (play.getText().equals("play")){
-						mediaPlayerComponent.getMediaPlayer().setPause(true);
-					}
-				}
-			}
-		});
+
 		//Allows the user to add commentary.
 		addCommentaryButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (ff==true){
-					ffswing.cancel(true);
-				}
-				if (rw==true){
-					rwswing.cancel(true);
-				}
-				ff=false;
-				rw=false;
-				play.setText("play");
+				getPlayback().turnOffRewindAndFastforward();
+				getPlay().setText("play");
 				mediaPlayerComponent.getMediaPlayer().setPause(true);
 
 				if (MainPlayerScreen.mediapath == null){
@@ -482,9 +358,36 @@ public class MainPlayerScreen extends JFrame {
 			@Override
 			public void finished(MediaPlayer mediaPlayer) {
 				mediaPlayerComponent.getMediaPlayer().stop();
-				play.setText("play");
+				getPlay().setText("play");
 			}
 		});
+	}
+
+	//Getters and setters
+	public JButton getPlay() {
+		return play;
+	}
+
+	public void setPlay(JButton play) {
+		this.play = play;
+	}
+
+	public PositionSlider getProgressSlider() {
+		return progressSlider;
+	}
+
+	public void setProgressSlider(PositionSlider progressSlider) {
+		this.progressSlider = progressSlider;
+	}
+
+
+	public PlaybackControl getPlayback() {
+		return playback;
+	}
+
+
+	public void setPlayback(PlaybackControl playback) {
+		this.playback = playback;
 	}
 
 

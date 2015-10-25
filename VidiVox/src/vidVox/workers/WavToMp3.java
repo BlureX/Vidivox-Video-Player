@@ -4,7 +4,7 @@ import java.lang.reflect.*;
 import java.text.DateFormat.Field;
 import javax.swing.SwingWorker;
 
-import vidVox.guiScreens.AddCommentaryScreen;
+import vidVox.gui.AddCommentaryScreen;
 
 /**
  * @author jxu811

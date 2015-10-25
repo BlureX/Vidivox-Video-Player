@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.swing.SwingWorker;
 
-import vidVox.guiScreens.MainPlayerScreen;
-import vidVox.guiScreens.TextToMp3Screen;
+import vidVox.gui.MainPlayerScreen;
+import vidVox.gui.TextToMp3Screen;
 
 /**
  * @author jxu811
@@ -46,7 +46,7 @@ public class OverlayMp3OntoVideo extends SwingWorker<Void, String>{
 	//This is code executed when my video has been overlayed. It will run the TexttoMP3 screen.
 	protected void done(){
 		MainPlayerScreen.mediapath = "/tmp/V"+filename+TextToMp3Screen.videoNumber+".mp4";
-		TextToMp3Screen.mainPlayerScreen.play.setText("pause");
+		TextToMp3Screen.mainPlayerScreen.getPlay().setText("pause");
 		TextToMp3Screen.mainPlayerScreen.run();
 		TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(false);
 		TextToMp3Screen.videoNumber++;

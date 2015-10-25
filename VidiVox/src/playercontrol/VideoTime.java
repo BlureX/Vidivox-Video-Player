@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import vidVox.guiScreens.MainPlayerScreen;
+import vidVox.gui.MainPlayerScreen;
 
 /**
  * @author jxu811

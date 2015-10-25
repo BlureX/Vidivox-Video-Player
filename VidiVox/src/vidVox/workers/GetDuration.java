@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 import javax.swing.SwingWorker;
 
-import vidVox.guiScreens.AddCommentaryScreen;
+import vidVox.gui.AddCommentaryScreen;
 
 /**
  * @author jxu811
