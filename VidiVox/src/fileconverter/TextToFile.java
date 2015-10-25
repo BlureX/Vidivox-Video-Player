@@ -17,8 +17,8 @@ public class TextToFile extends SwingWorker<Void, String>{
 	private String location;
 	private Boolean overlay;
 	private AddCommentaryScreen commentary;
-	private String commentaryContent;
-	String hour,minute,second;
+	private String commentaryContent,voiceType;
+	private String hour,minute,second;
 
 	@Override
 	protected Void doInBackground() throws Exception {
@@ -49,18 +49,19 @@ public class TextToFile extends SwingWorker<Void, String>{
 	 * @param second
 	 * This is the constructor used for this class
 	 */
-	public TextToFile (String text, String location, AddCommentaryScreen commentary,String hour, String minute,String second){
+	public TextToFile (String text, String location, AddCommentaryScreen commentary,String hour, String minute,String second, String voiceType){
 		this.text = text;
 		this.location = location;
 		this.commentary=commentary;
 		this.hour=hour;
 		this.minute=minute;
 		this.second=second;
+		this.voiceType=voiceType;
 	}
 
 	//This is the done method which will turn my text to a wav file.
 	protected void done(){
-		TextToWav k = new TextToWav(this.location, this.filename, this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
+		TextToWav k = new TextToWav(this.location, this.filename, this.commentary,this.hour,this.minute,this.second,this.commentaryContent,this.voiceType);
 		k.execute();
 
 	}

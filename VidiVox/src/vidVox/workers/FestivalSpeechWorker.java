@@ -12,7 +12,7 @@ public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
 	private Process process;
 	private int voice,counter;
 	private AddCommentaryScreen commentary;
-	private String commentaryContent,hour,minute,second,location,filename; 
+	private String commentaryContent,hour,minute,second,location,filename,voiceType; 
 
 	@Override
 	protected Void doInBackground() throws Exception {
@@ -47,7 +47,8 @@ public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
 								String minute,
 								String second,
 								int voice,
-								int counter){
+								int counter,
+								String voiceType){
 		this.commentaryContent=commentaryContent;
 		this.location=location;
 		this.commentary=commentary;
@@ -56,11 +57,12 @@ public class FestivalSpeechWorker extends SwingWorker<Void,Void>{
 		this.second=second;
 		this.voice=voice;
 		this.counter=counter;
+		this.voiceType=voiceType;
 	}
 
 	@Override
 	public void done(){
-		WavToMp3 k = new WavToMp3(this.location, filename,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
+		WavToMp3 k = new WavToMp3(this.location, filename,this.commentary,this.hour,this.minute,this.second,this.commentaryContent,this.voiceType);
 		k.execute();
 	}
 

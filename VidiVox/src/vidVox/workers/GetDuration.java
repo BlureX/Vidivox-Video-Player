@@ -19,7 +19,7 @@ public class GetDuration extends SwingWorker<Void,String>{
 	public String duration;
 	private String line,hour,minute,second;;
 	private AddCommentaryScreen commentary;
-	private String  commentaryContent;
+	private String  commentaryContent, voiceType;
 	@Override
 	protected Void doInBackground() throws Exception {
 
@@ -54,19 +54,20 @@ public class GetDuration extends SwingWorker<Void,String>{
 	 * @param commentaryContent
 	 * Constructor for GetDuration
 	 */
-	public GetDuration(String file,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
+	public GetDuration(String file,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent,String voiceType){
 		this.file = file;
 		this.commentary=commentary;
 		this.hour=hour;
 		this.minute=minute;
 		this.second=second;
 		this.commentaryContent= commentaryContent;
+		this.voiceType=voiceType;
 	}
 
 	//This will add to the table after it has calculated the duration of the commentary or mp3file.
 	@Override
 	public void done(){
-		commentary.addToTable(this.commentaryContent,this.line,this.hour,this.minute,this.second,this.file);
+		commentary.addToTable(this.commentaryContent,this.line,this.hour,this.minute,this.second,this.file,this.voiceType);
 	}
 
 }

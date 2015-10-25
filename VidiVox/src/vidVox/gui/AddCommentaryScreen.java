@@ -78,7 +78,7 @@ public class AddCommentaryScreen extends JFrame{
 		//Create gridbag constrant variable.
 		GridBagConstraints c = new GridBagConstraints();
 		setTitle("Add Commentary");
-		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add",""};
+		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add","","Voice Type"};
 
 		commentaryTable = new DefaultTableModel(audioOverlayOptions,0){
 			@Override
@@ -95,6 +95,9 @@ public class AddCommentaryScreen extends JFrame{
 					classType = String.class;
 					break;
 				case 3:
+					classType = String.class;
+					break;
+				case 4:
 					classType = String.class;
 					break;
 				}
@@ -353,7 +356,7 @@ public class AddCommentaryScreen extends JFrame{
 								String hour=checkZero(hourSpinner.getValue().toString());
 								String minute=checkZero(minuteSpinner.getValue().toString());
 								String second=checkZero(secondSpinner.getValue().toString());
-								GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName());
+								GetDuration duration = new GetDuration(mediaPath,addCommentary,hour,minute,second,ourFile.getName(),"mp3 file");
 								duration.execute();
 							}else {
 								JOptionPane.showMessageDialog(null, "Please select a mp3 file");
@@ -386,13 +389,13 @@ public class AddCommentaryScreen extends JFrame{
 				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
 					if (textfield.getText().length()<=100 && textfield.getText().length()>0 && displayText==false) {
 						if (voiceChanger.getSelectedIndex()==0){
-							TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
+							TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,"Robotic");
 							tmpFile.execute();
 						}else if (voiceChanger.getSelectedIndex()==1){
-							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,1,counter);
+							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,1,counter,"Kiwi");
 							tmpFile.execute();
 						}else if (voiceChanger.getSelectedIndex()==2){
-							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,2,counter);
+							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,2,counter,"British");
 							tmpFile.execute();
 						}else{
 							JOptionPane.showMessageDialog(null, "Error in creating commentary, please try again");
@@ -538,9 +541,9 @@ public class AddCommentaryScreen extends JFrame{
 	 * @param path
 	 * This will add the content, duration, time of video and path of commentary into the table.
 	 */
-	public void addToTable(String content, String duration, String hour, String minute, String second, String path){
+	public void addToTable(String content, String duration, String hour, String minute, String second, String path,String voiceType){
 		if (checkTime(duration,hour,minute,second)){
-			Object[] data = { content , duration, hour+":"+minute+":"+second,path };
+			Object[] data = { content , duration, hour+":"+minute+":"+second,path,voiceType };
 			commentaryTable.addRow(data);
 		}else{
 			JOptionPane.showMessageDialog(null, "Commentary will exceed the video length");

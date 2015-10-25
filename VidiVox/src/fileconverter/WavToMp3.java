@@ -17,7 +17,7 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 	private String filename;
 	private AddCommentaryScreen commentary;
 	String hour,minute,second;
-	private String  commentaryContent;
+	private String  commentaryContent,voiceType;
 	@Override
 	protected Void doInBackground() throws Exception {
 
@@ -51,7 +51,7 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 	 * @param commentaryContent
 	 * Constructor for WavToMp3
 	 */
-	public WavToMp3 (String location, String filename,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent){
+	public WavToMp3 (String location, String filename,AddCommentaryScreen commentary,String hour, String minute,String second,String commentaryContent,String voiceType){
 		this.location = location;
 		this.filename = filename;
 		this.commentary=commentary;
@@ -59,11 +59,12 @@ public class WavToMp3 extends SwingWorker<Void, String>{
 		this.minute=minute;
 		this.second=second;
 		this.commentaryContent= commentaryContent;
+		this.voiceType=voiceType;
 	}
 
 	//Gets the duration of the Mp3 after it is created.
 	protected void done(){
-		GetDuration duration = new GetDuration(this.location,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
+		GetDuration duration = new GetDuration(this.location,this.commentary,this.hour,this.minute,this.second,this.commentaryContent,this.voiceType);
 		duration.execute();
 
 	}

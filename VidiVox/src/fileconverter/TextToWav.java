@@ -17,7 +17,7 @@ public class TextToWav extends SwingWorker<Void, String>{
 	private String filename;
 	private AddCommentaryScreen commentary;
 	private String commentaryContent;
-	private String hour,minute,second;
+	private String hour,minute,second,voiceType;
 	@Override
 	protected Void doInBackground() throws Exception {
 
@@ -48,7 +48,7 @@ public class TextToWav extends SwingWorker<Void, String>{
 	 * @param commentaryContent
 	 * Constructor for my class
 	 */
-	public TextToWav (String location, String filename, AddCommentaryScreen commentary,String hour, String minute,String second,String  commentaryContent){
+	public TextToWav (String location, String filename, AddCommentaryScreen commentary,String hour, String minute,String second,String  commentaryContent,String voiceType){
 		this.location = location;
 		this.filename = filename;
 		this.commentary=commentary;
@@ -56,11 +56,12 @@ public class TextToWav extends SwingWorker<Void, String>{
 		this.minute=minute;
 		this.second=second;
 		this.commentaryContent=commentaryContent;
+		this.voiceType=voiceType;
 	}
 
 
 	protected void done(){
-		WavToMp3 k = new WavToMp3(this.location, this.filename,this.commentary,this.hour,this.minute,this.second,this.commentaryContent);
+		WavToMp3 k = new WavToMp3(this.location, this.filename,this.commentary,this.hour,this.minute,this.second,this.commentaryContent,this.voiceType);
 		k.execute();
 	}
 }
