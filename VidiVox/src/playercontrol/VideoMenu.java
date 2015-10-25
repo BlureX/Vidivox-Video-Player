@@ -61,14 +61,14 @@ public class VideoMenu {
 		//save video as button
 		saveVideoAs = new JMenuItem("Save Video as...");	
 		video.add(saveVideoAs);
-		
+
 		help = new JMenu("About");
 		menuBar.add(help);
-		
+
 		//save video as button
 		about = new JMenuItem("Help");	
 		help.add(about);
-		
+
 		return menuBar;	
 	}
 
@@ -98,12 +98,12 @@ public class VideoMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Pauses the current video being played if any.
-				mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
+				mainPlayer.getMediaPlayerComponent().getMediaPlayer().setPause(true);
 				//Uses the method saveVideoAs which will allow you to save the video into a location the user wants.
 				mainPlayer.saveVideo.saveVideoAs();
 				if (mainPlayer.getPlay().getText().equals("pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
-					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
+					mainPlayer.getMediaPlayerComponent().getMediaPlayer().play();
 				}
 				MainPlayerScreen.saved=true;
 			}
@@ -113,7 +113,7 @@ public class VideoMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Pauses the current video being played if any.
-				mainPlayer.mediaPlayerComponent.getMediaPlayer().setPause(true);
+				mainPlayer.getMediaPlayerComponent().getMediaPlayer().setPause(true);
 				//Check if the user grabbed a file.
 				boolean openfile=openVideoOption.grabFile();
 				if (openfile){
@@ -125,7 +125,7 @@ public class VideoMenu {
 				}
 				if (mainPlayer.getPlay().getText().equals("pause")){
 					//If user decided to cancel the operation, it will continue playing the video if it is being played.
-					mainPlayer.mediaPlayerComponent.getMediaPlayer().play();
+					mainPlayer.getMediaPlayerComponent().getMediaPlayer().play();
 				}
 			}
 		});

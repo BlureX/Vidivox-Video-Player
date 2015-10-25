@@ -36,35 +36,47 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
+
+/**
+ * @author jxu811
+ * This class is used for setting up the main player screen and will set out the layout and functionality
+ * of the buttons.
+ * Also used code from 
+ * https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
+ * additional features such as progress bar, updateRunnable and ScheduledExecutorService referenced from this code.
+ */
+/**
+ * @author jxu811
+ *
+ */
 public class MainPlayerScreen extends JFrame {
 	//Fields which are used within this class and package.
 	MainPlayerScreen mainplayer = this;
 	private JPanel topPane, bottomPane;
-	public EmbeddedMediaPlayerComponent mediaPlayerComponent;
-//	private Skip ffswing, rwswing;
+	private EmbeddedMediaPlayerComponent mediaPlayerComponent;
 	public static String mediapath;
 	public static LoadingScreen loadingScreen = new LoadingScreen();
 	public static AddCommentaryScreen addCommentaryScreen;
-	//private boolean ff=false, rw=false,pressedWhilePlaying = false;
 	public static boolean saved=true;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	private VolumeControl volumeFunctionality;
 	private PositionSlider progressSlider;
 	private VideoTime videoTime;
+
 	//Set up the GridBag Layout for my screen.
 	private GridBagLayout gbl_topPane;
 	private  GridBagLayout gbl_bottomPane;
 	private  GridBagConstraints c;
 
 	//Buttons, sliders and labels which are used in my GUI for users to click.
-//	private  JButton fastforward, rewind;
 	private JButton play;
 	private JButton addCommentaryButton;
 	public SaveVideoAs saveVideo = new SaveVideoAs();
 
 	//Menu at the top which allows users to select their appropriate options.
 	private VideoMenu videoMenu;
-	
+
 	private PlaybackControl playback;
 
 	//	/**
@@ -142,19 +154,19 @@ public class MainPlayerScreen extends JFrame {
 	 */
 	public void run() {
 		//This will run the video.
-		mediaPlayerComponent.getMediaPlayer().playMedia(mediapath);
+		getMediaPlayerComponent().getMediaPlayer().playMedia(mediapath);
 		//This will get the current time of the video.
-		final long time = mediaPlayerComponent.getMediaPlayer().getTime();
+		final long time = getMediaPlayerComponent().getMediaPlayer().getTime();
 		//This will get the position of the video.
-		final int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
+		final int position = (int)(getMediaPlayerComponent().getMediaPlayer().getPosition() * 1000.0f);
 		//This will get the total length of the video.
-		final long duration= mediaPlayerComponent.getMediaPlayer().getLength();
+		final long duration= getMediaPlayerComponent().getMediaPlayer().getLength();
 
 		//This will be used to update the GUI.
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				if(mediaPlayerComponent.getMediaPlayer().isPlaying()) {
+				if(getMediaPlayerComponent().getMediaPlayer().isPlaying()) {
 					videoTime.updateTime(time);
 					getProgressSlider().updatePosition(position);
 					videoTime.updateDuration(duration);
@@ -162,13 +174,13 @@ public class MainPlayerScreen extends JFrame {
 			}
 		});
 		//This will execute the code at a fixed rate.
-		executorService.scheduleAtFixedRate(new UpdateRunnable(mediaPlayerComponent), 0, 100, TimeUnit.MILLISECONDS);
+		executorService.scheduleAtFixedRate(new UpdateRunnable(getMediaPlayerComponent()), 0, 100, TimeUnit.MILLISECONDS);
 	}
 	/**
 	 * Update the GUI as it plays.
 	 */
 	public void updateGUI() {
-		if(!mediaPlayerComponent.getMediaPlayer().isPlaying()) {
+		if(!getMediaPlayerComponent().getMediaPlayer().isPlaying()) {
 			if(!progressSlider.isPressedWhilePlaying()) {
 				try {
 					Thread.sleep(100);
@@ -177,14 +189,14 @@ public class MainPlayerScreen extends JFrame {
 					// Don't care if unblocked early
 				}
 				//Pauses the video to make sure it is paused if dragged while paused during position slider.
-				mediaPlayerComponent.getMediaPlayer().setPause(true);
+				getMediaPlayerComponent().getMediaPlayer().setPause(true);
 			}
 		}
 		//Set the title of the video.
 
 		//Gets the current time and position and updates them in the GUI.
-		long time = mediaPlayerComponent.getMediaPlayer().getTime();
-		int position = (int)(mediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
+		long time = getMediaPlayerComponent().getMediaPlayer().getTime();
+		int position = (int)(getMediaPlayerComponent().getMediaPlayer().getPosition() * 1000.0f);
 		videoTime.updateTime(time);
 		getProgressSlider().updatePosition(position);
 	}
@@ -252,10 +264,10 @@ public class MainPlayerScreen extends JFrame {
 		setJMenuBar(menuBar);
 
 		//Adding in the video area where a mp4 can be played
-		mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
-		mediaPlayerComponent.setPreferredSize(new Dimension(600,480));
-//		ff=false;
-//		rw=false;
+		setMediaPlayerComponent(new EmbeddedMediaPlayerComponent());
+		getMediaPlayerComponent().setPreferredSize(new Dimension(600,480));
+		//		ff=false;
+		//		rw=false;
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -264,7 +276,7 @@ public class MainPlayerScreen extends JFrame {
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(10,10,10,10);
-		topPane.add(mediaPlayerComponent, c);	
+		topPane.add(getMediaPlayerComponent(), c);	
 
 		//JButton which Plays the video
 		setPlay(new JButton("pause"));
@@ -296,7 +308,7 @@ public class MainPlayerScreen extends JFrame {
 		c.insets = new Insets(0,10,0,10);
 		c.anchor = GridBagConstraints.EAST;
 		bottomPane.add(addCommentaryButton, c);	 
-		
+
 		setPlayback(new PlaybackControl(mainplayer));
 		getPlayback().setUpPlaybackButtons(bottomPane);
 
@@ -311,7 +323,7 @@ public class MainPlayerScreen extends JFrame {
 		volumeFunctionality.setUpListener();
 		//Sets up action listener for progress slider.
 		getProgressSlider().setUpListeners();
-		
+
 		getPlayback().setUpPlaybackListeners();
 
 
@@ -329,11 +341,11 @@ public class MainPlayerScreen extends JFrame {
 				//changes the text of the button to add a more user friendly experience.
 				if (getPlay().getText().equals("play")){
 					getPlay().setText("pause");
-					mediaPlayerComponent.getMediaPlayer().play();
+					getMediaPlayerComponent().getMediaPlayer().play();
 
 				}else{
 					getPlay().setText("play");
-					mediaPlayerComponent.getMediaPlayer().setPause(true);
+					getMediaPlayerComponent().getMediaPlayer().setPause(true);
 				}
 			}
 		});
@@ -344,7 +356,7 @@ public class MainPlayerScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				getPlayback().turnOffRewindAndFastforward();
 				getPlay().setText("play");
-				mediaPlayerComponent.getMediaPlayer().setPause(true);
+				getMediaPlayerComponent().getMediaPlayer().setPause(true);
 
 				if (MainPlayerScreen.mediapath == null){
 					JOptionPane.showMessageDialog(null, "Error please open a video before trying to add commentary");
@@ -354,10 +366,10 @@ public class MainPlayerScreen extends JFrame {
 			}
 		});
 		//Checks for when the video is finished and if it is, it will stop the video and user will need to play video again.
-		mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+		getMediaPlayerComponent().getMediaPlayer().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
 			@Override
 			public void finished(MediaPlayer mediaPlayer) {
-				mediaPlayerComponent.getMediaPlayer().stop();
+				getMediaPlayerComponent().getMediaPlayer().stop();
 				getPlay().setText("play");
 			}
 		});
@@ -388,6 +400,16 @@ public class MainPlayerScreen extends JFrame {
 
 	public void setPlayback(PlaybackControl playback) {
 		this.playback = playback;
+	}
+
+
+	public EmbeddedMediaPlayerComponent getMediaPlayerComponent() {
+		return mediaPlayerComponent;
+	}
+
+
+	public void setMediaPlayerComponent(EmbeddedMediaPlayerComponent mediaPlayerComponent) {
+		this.mediaPlayerComponent = mediaPlayerComponent;
 	}
 
 

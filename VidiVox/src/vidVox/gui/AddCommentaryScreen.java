@@ -1,4 +1,4 @@
-	package vidVox.gui;
+package vidVox.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -110,7 +110,7 @@ public class AddCommentaryScreen extends JFrame{
 		//Code which I have referenced to hide the table
 		//http://stackoverflow.com/questions/1492217/how-to-make-a-columns-in-jtable-invisible-for-swing-java
 		table.removeColumn(table.getColumnModel().getColumn(3));
-		
+
 		JScrollPane scrollPane = new JScrollPane(); 
 		// scrollPane.setBounds(20, 75, 400, 400);
 		scrollPane.setViewportView(table);
@@ -166,20 +166,20 @@ public class AddCommentaryScreen extends JFrame{
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
 
-		
-//		String[] festivalVoice = { "Default", "Female", "Robo"};
-//		JComboBox voiceChanger = new JComboBox(festivalVoice);
-//		c = new GridBagConstraints();
-//		c.gridx = 0;
-//		c.gridy = 2;
-//		c.weightx = 1;
-//		c.weighty = 0;
-//		c.gridwidth =;
-//		c.anchor = GridBagConstraints.EAST;
-//		c.insets = new Insets(0,0,0,0);
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		pane.add(voiceChanger, c);
-		
+
+		//		String[] festivalVoice = { "Default", "Female", "Robo"};
+		//		JComboBox voiceChanger = new JComboBox(festivalVoice);
+		//		c = new GridBagConstraints();
+		//		c.gridx = 0;
+		//		c.gridy = 2;
+		//		c.weightx = 1;
+		//		c.weighty = 0;
+		//		c.gridwidth =;
+		//		c.anchor = GridBagConstraints.EAST;
+		//		c.insets = new Insets(0,0,0,0);
+		//		c.fill = GridBagConstraints.HORIZONTAL;
+		//		pane.add(voiceChanger, c);
+
 		//This is a textfield box which allow you to create commentary to add to the video.
 		textfield = new JTextField();
 		c = new GridBagConstraints();
@@ -318,7 +318,7 @@ public class AddCommentaryScreen extends JFrame{
 						String hour=hourSpinner.getValue().toString();
 						String minute=minuteSpinner.getValue().toString();
 						String second=secondSpinner.getValue().toString();
-						
+
 						if (hourSpinner.getValue().toString().length()<=1){
 							hour="0"+hourSpinner.getValue().toString();
 						}
@@ -373,7 +373,7 @@ public class AddCommentaryScreen extends JFrame{
 		deleteRow.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int rowsSelected = table.getSelectedRows().length;
 				for(int i=0; i<rowsSelected ; i++ ) {
 					//Cancels any playing commentary from the selected rows

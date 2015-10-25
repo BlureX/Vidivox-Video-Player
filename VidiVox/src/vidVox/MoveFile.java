@@ -22,7 +22,7 @@ public class MoveFile extends SwingWorker<Void, String>{
 	@Override
 	protected Void doInBackground() throws Exception {
 		if (mp3==false){
-		TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(true);
+			TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(true);
 		}
 		String cmd = "cp "+"\""+file+"\""+" "+"\""+location+"\"";
 
@@ -53,7 +53,7 @@ public class MoveFile extends SwingWorker<Void, String>{
 	public void done(){
 		//Once it is done, it will display a message.
 		if (mp3==false){
-		TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(false);
+			TextToMp3Screen.mainPlayerScreen.loadingScreen.setVisible(false);
 		}
 		JOptionPane.showMessageDialog(null, "Done");
 	}

@@ -98,7 +98,7 @@ public class VolumeControl {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider)e.getSource();
-				mainPlayer.mediaPlayerComponent.getMediaPlayer().setVolume(source.getValue());
+				mainPlayer.getMediaPlayerComponent().getMediaPlayer().setVolume(source.getValue());
 			}
 		});
 		//This will allow you to click anywhere on the volume slider and this will update the volume bar.

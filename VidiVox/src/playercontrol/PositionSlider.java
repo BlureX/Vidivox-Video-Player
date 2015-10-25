@@ -16,6 +16,9 @@ import vidVox.gui.MainPlayerScreen;
 /**
  * This class will help set up the position slider and all its functionality 
  * in the Vidivox video commentator.
+ * Also used code from 
+ * https://github.com/caprica/vlcj/blob/master/src/test/java/uk/co/caprica/vlcj/test/basic/PlayerControlsPanel.java for
+ * additional features such as progress bar.
  * @author jxu811
  * 
  */
@@ -23,9 +26,9 @@ public class PositionSlider {
 	//Initialise my variables that I will be using.
 	private JSlider positionSlider;
 	private GridBagConstraints  constraint;
-	MainPlayerScreen mainPlayer;
+	private MainPlayerScreen mainPlayer;
 	private ChangeListener listener;
-	public boolean refresh=false;
+	private boolean refresh=false;
 	private boolean pressedWhilePlaying = false;
 	public PositionSlider(MainPlayerScreen mainPlayer, GridBagConstraints constraint){
 		this.mainPlayer=mainPlayer;
@@ -62,7 +65,7 @@ public class PositionSlider {
 	 */
 	void setSliderBasedPosition() {
 		//Check if it is playable.
-		if(!mainPlayer.mediaPlayerComponent.getMediaPlayer().isSeekable()) {
+		if(!mainPlayer.getMediaPlayerComponent().getMediaPlayer().isSeekable()) {
 			return;
 		}
 
@@ -72,7 +75,7 @@ public class PositionSlider {
 			positionValue = 0.99f;
 		}
 		//Set position of position slider.
-		mainPlayer.mediaPlayerComponent.getMediaPlayer().setPosition(positionValue);
+		mainPlayer.getMediaPlayerComponent().getMediaPlayer().setPosition(positionValue);
 	}
 
 
@@ -107,7 +110,7 @@ public class PositionSlider {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				refresh=true;
-				if(mainPlayer.mediaPlayerComponent.getMediaPlayer().isPlaying()) {
+				if(mainPlayer.getMediaPlayerComponent().getMediaPlayer().isPlaying()) {
 					setPressedWhilePlaying(true);
 				}
 				else {
