@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import fileconverter.TextToFile;
 
 import vidVox.MoveFile;
+import vidVox.workers.FestivalSpeechWorker;
 import vidVox.workers.GetDuration;
 import vidVox.workers.OverlayMp3OntoVideo;
 import vidVox.workers.PreviewMP3;
@@ -57,6 +58,7 @@ public class AddCommentaryScreen extends JFrame{
 	private List<PreviewMP3> voiceList=new ArrayList<PreviewMP3>();	
 	private MainPlayerScreen mainPlayer;
 	private boolean displayText=true;
+	private JComboBox voiceChanger;
 	/**
 	 * @param screen
 	 * Constructor for my AddCommentary class
@@ -318,8 +320,8 @@ public class AddCommentaryScreen extends JFrame{
 		//c.insets = new Insets(3,90,3,50);
 		pane.add(saveButton, c);
 
-		String[] festivalVoice = { "Default", "Female", "Robo"};
-		JComboBox voiceChanger = new JComboBox(festivalVoice);
+		String[] festivalVoices = { "Robotic", "Kiwi", "British"};
+		voiceChanger = new JComboBox(festivalVoices);
 		c = new GridBagConstraints();
 		c.gridx = 4;
 		c.gridy = 2;
@@ -383,8 +385,18 @@ public class AddCommentaryScreen extends JFrame{
 				//Starts creating the mp3 file and place it in the tmp folder.
 				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
 					if (textfield.getText().length()<=100 && textfield.getText().length()>0 && displayText==false) {
-						TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
-						tmpFile.execute();
+						if (voiceChanger.getSelectedIndex()==0){
+							TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second);
+							tmpFile.execute();
+						}else if (voiceChanger.getSelectedIndex()==1){
+							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,1,counter);
+							tmpFile.execute();
+						}else if (voiceChanger.getSelectedIndex()==2){
+							FestivalSpeechWorker tmpFile = new FestivalSpeechWorker(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,2,counter);
+							tmpFile.execute();
+						}else{
+							JOptionPane.showMessageDialog(null, "Error in creating commentary, please try again");
+						}
 					}else{
 						JOptionPane.showMessageDialog(null, "Please enter between 1-100 characters");
 					}
@@ -508,9 +520,9 @@ public class AddCommentaryScreen extends JFrame{
 
 		textfield.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
-				//Only clear if user clicked the text box for the first time
+				//Clears the text when user first presses the box
 				if (displayText){
-					textfield.setText(""); //Clear text
+					textfield.setText("");
 					displayText=false;
 				}		
 			}
