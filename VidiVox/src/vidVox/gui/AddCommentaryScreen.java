@@ -31,10 +31,10 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import fileconverter.FestivalSpeechWorker;
 import fileconverter.TextToFile;
 
 import vidVox.MoveFile;
-import vidVox.workers.FestivalSpeechWorker;
 import vidVox.workers.GetDuration;
 import vidVox.workers.OverlayMp3OntoVideo;
 import vidVox.workers.PreviewMP3;
@@ -78,9 +78,10 @@ public class AddCommentaryScreen extends JFrame{
 		//Create gridbag constrant variable.
 		GridBagConstraints c = new GridBagConstraints();
 		setTitle("Add Commentary");
-		String[] audioOverlayOptions = {"Commentary", "Duration","Time to add","","Voice Type"};
+		String[] tableHeadings = {"Commentary", "Duration","Time to add","","Voice Type"};
 
-		commentaryTable = new DefaultTableModel(audioOverlayOptions,0){
+		//Sets up table.
+		commentaryTable = new DefaultTableModel(tableHeadings,0){
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				Class classType = String.class;
@@ -103,6 +104,7 @@ public class AddCommentaryScreen extends JFrame{
 				}
 				return classType;
 			}
+			//Makes cell not editable
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
 				return false;
 			}
@@ -116,10 +118,7 @@ public class AddCommentaryScreen extends JFrame{
 		table.removeColumn(table.getColumnModel().getColumn(3));
 
 		JScrollPane scrollPane = new JScrollPane(); 
-		// scrollPane.setBounds(20, 75, 400, 400);
 		scrollPane.setViewportView(table);
-		//  scrollPane.setMinimumSize( scrollPane.getPreferredSize() );
-
 		//creating the content pane which will store all of the addcommentaryScreen components
 		GridBagLayout gbl_Pane = new GridBagLayout();
 		pane = new JPanel(gbl_Pane);
@@ -174,9 +173,6 @@ public class AddCommentaryScreen extends JFrame{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.WEST;
 		pane.add(createCommentary, c);
-
-
-
 
 		//This is a textfield box which allow you to create commentary to add to the video.
 		textfield = new JTextField();
@@ -387,7 +383,9 @@ public class AddCommentaryScreen extends JFrame{
 
 				//Starts creating the mp3 file and place it in the tmp folder.
 				if ((textfield.getText() != null) && (!textfield.getText().trim().equals(""))){
+					//Checks that character limit is correct
 					if (textfield.getText().length()<=100 && textfield.getText().length()>0 && displayText==false) {
+						//Checks which voicetype is selected
 						if (voiceChanger.getSelectedIndex()==0){
 							TextToFile tmpFile = new TextToFile(textfield.getText(),"/tmp/festSpeech"+counter,addCommentary,hour,minute,second,"Robotic");
 							tmpFile.execute();
@@ -432,6 +430,7 @@ public class AddCommentaryScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int totalRows = table.getRowCount();
+				//Checks if there is commentary
 				if (totalRows > 0){
 					String cmd = "ffmpeg -y -i " + MainPlayerScreen.originalVideo + " ";
 					for (int i = 0 ; i<totalRows; i++){
@@ -446,11 +445,12 @@ public class AddCommentaryScreen extends JFrame{
 						cmd = cmd + "-map " + i +":0" + " ";
 					}
 					cmd = cmd + "-c:v copy -async 1 -filter_complex amix=inputs=" + (totalRows+1) + " ";
-					//System.out.println(cmd);
 					OverlayMp3OntoVideo mergeVideo = new OverlayMp3OntoVideo(cmd, "coolffFile",true,mainPlayer);
 					mergeVideo.execute();
 					setVisible(false);
 					MainPlayerScreen.saved=false;
+				}else {
+					JOptionPane.showMessageDialog(null, "Please create commentary before previewing");
 				}
 			}
 		});
@@ -489,34 +489,39 @@ public class AddCommentaryScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Chooses file path.
-				String mediaPath="~/";
-				File ourFile;
-				FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
-				SaveDialogScreen.ourFileSelector.resetChoosableFileFilters();
-				//opening the save file explorer, user gets to choose where to save the file   
-				SaveDialogScreen.ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				SaveDialogScreen.ourFileSelector.setFileFilter(filter);
-				int status = SaveDialogScreen.ourFileSelector.showSaveDialog(null);
-				//Checks if user chose to save.
-				if (status == JFileChooser.APPROVE_OPTION){
-					//Checks if valid path.
-					if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
-						ourFile=SaveDialogScreen.ourFileSelector.getSelectedFile();
-						mediaPath=ourFile.getAbsolutePath();
-						//Adds .mp3 to end of file if it isnt specified in the text.
-						if ((!(mediaPath.endsWith(".mp3")))) {
-							mediaPath = mediaPath+".mp3";
+				if (table.getSelectedRow()!= -1){
+					String mediaPath="~/";
+					File ourFile;
+					FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
+					SaveDialogScreen.ourFileSelector.resetChoosableFileFilters();
+					//opening the save file explorer, user gets to choose where to save the file   
+					SaveDialogScreen.ourFileSelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					SaveDialogScreen.ourFileSelector.setFileFilter(filter);
+					int status = SaveDialogScreen.ourFileSelector.showSaveDialog(null);
+					//Checks if user chose to save.
+
+					if (status == JFileChooser.APPROVE_OPTION){
+						//Checks if valid path.
+						if (!(SaveDialogScreen.ourFileSelector.getSelectedFile() == null)){
+							ourFile=SaveDialogScreen.ourFileSelector.getSelectedFile();
+							mediaPath=ourFile.getAbsolutePath();
+							//Adds .mp3 to end of file if it isnt specified in the text.
+							if ((!(mediaPath.endsWith(".mp3")))) {
+								mediaPath = mediaPath+".mp3";
+							}
+							//creates the mp3 file at the location
+							int row = table.getSelectedRow();
+							String filename = commentaryTable.getValueAt(row, 3).toString();
+							//Uses move file to place the file into the stated path.
+							MoveFile k = new MoveFile(filename,mediaPath,true);
+							k.execute();
+						}else{
+							JOptionPane.showMessageDialog(null, "Error please save to an appropriate location");
 						}
-						//creates the mp3 file at the location
-						int row = table.getSelectedRow();
-						String filename = commentaryTable.getValueAt(row, 3).toString();
-						//Uses move file to place the file into the stated path.
-						MoveFile k = new MoveFile(filename,mediaPath,true);
-						k.execute();
-					}else{
-						JOptionPane.showMessageDialog(null, "Error please save to an appropriate location");
+					}else if (status == JFileChooser.CANCEL_OPTION){			
 					}
-				}else if (status == JFileChooser.CANCEL_OPTION){			
+				}else{
+					JOptionPane.showMessageDialog(null, "Please select a commentary to add");
 				}
 			}
 		});
@@ -546,7 +551,7 @@ public class AddCommentaryScreen extends JFrame{
 			Object[] data = { content , duration, hour+":"+minute+":"+second,path,voiceType };
 			commentaryTable.addRow(data);
 		}else{
-			JOptionPane.showMessageDialog(null, "Commentary will exceed the video length");
+			JOptionPane.showMessageDialog(null, "Error, commentary will exceed the video length");
 		}
 	}
 

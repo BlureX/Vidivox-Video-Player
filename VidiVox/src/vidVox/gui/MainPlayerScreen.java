@@ -342,7 +342,7 @@ public class MainPlayerScreen extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getPlayback().turnOffRewindAndFastforward();
-				getPlay().setText("play");
+				getPlay().setText("Play");
 				getMediaPlayerComponent().getMediaPlayer().setPause(true);
 
 				if (MainPlayerScreen.mediapath == null){

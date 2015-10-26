@@ -3,11 +3,13 @@ package playercontrol;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import vidVox.MoveFile;
 import vidVox.OpenVideo;
@@ -99,6 +101,9 @@ public class VideoMenu {
 				}
 			}
 		});
+		//Allows you to set hotkey for save.
+		saveVideo.setMnemonic(KeyEvent.VK_S);
+		saveVideo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
 		//Allows the user to save Video as.
 		saveVideoAs.addActionListener(new ActionListener() {
 			@Override
@@ -136,12 +141,15 @@ public class VideoMenu {
 				}
 			}
 		});
+		//Allows you to set hotkey for open video.
+		openVideo.setMnemonic(KeyEvent.VK_O);
+		openVideo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
 		
 		about.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "Hover over the componenets of Vidivox to get an idea of what " +
-							"the compnenets are meant to do. Also reading the user manual will help users.");
+							"they are meant to do");
 
 				}
 			

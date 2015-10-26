@@ -1,10 +1,9 @@
-package vidVox.workers;
+package fileconverter;
 
 import java.io.IOException;
 
 import javax.swing.SwingWorker;
 
-import fileconverter.WavToMp3;
 
 import vidVox.gui.AddCommentaryScreen;
 
