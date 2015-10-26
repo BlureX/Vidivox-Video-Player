@@ -124,13 +124,7 @@ public class VolumeControl {
 				}else{
 					mainPlayer.getMediaPlayerComponent().getMediaPlayer().mute(true);
 				}
-//				if (volume.getValue() != 0 ) {
-//					currentVolume = volume.getValue();
-//					volume.setValue(0);
-//					//If muted already, and clicked mute again, it will refer back to the previous value it was just before being muted.
-//				} else {
-//					volume.setValue(currentVolume);
-//				}
+
 			}
 		});
 

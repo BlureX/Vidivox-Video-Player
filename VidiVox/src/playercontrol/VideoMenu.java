@@ -80,10 +80,6 @@ public class VideoMenu {
 		return menuBar;	
 	}
 
-
-
-
-
 	/**
 	 * This will set up my Action listeners for my items which are located in the menu
 	 */

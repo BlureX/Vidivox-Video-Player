@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import vidVox.gui.MainPlayerScreen;
 import vidVox.workers.Skip;
 
+/**
+ * @author jxu811
+ * This class will allow me to set up the rewind and fastfoward functionality.
+ */
 public class PlaybackControl {
 	private boolean rw,ff;
 	private Skip ffswing, rwswing;

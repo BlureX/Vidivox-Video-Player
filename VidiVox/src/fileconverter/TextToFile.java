@@ -1,7 +1,6 @@
 package fileconverter;
 import java.io.IOException;
-import java.lang.reflect.*;
-import java.text.DateFormat.Field;
+
 import javax.swing.SwingWorker;
 
 import vidVox.gui.AddCommentaryScreen;
